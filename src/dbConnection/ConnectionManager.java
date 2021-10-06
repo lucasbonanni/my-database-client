@@ -1,3 +1,5 @@
+package dbConnection;
+
 public class ConnectionManager {
     private boolean isConnected;
     private IDatabase database;
