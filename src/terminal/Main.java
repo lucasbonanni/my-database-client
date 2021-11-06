@@ -59,7 +59,7 @@ public class Main {
         StringBuilder builder = new StringBuilder();
         try {
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(query);
+            ResultSet rs = st.executeQuery(query); /* Sirver para cualquier query, update, delete, etc.view */
             var r = rs.getMetaData();
             r.getColumnCount();
             String columns = "";

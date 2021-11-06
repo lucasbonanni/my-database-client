@@ -8,6 +8,7 @@ public class NestedSplitPanel {
 
         JScrollPane textPane = TextPanel.GetTextPanel();
 
+
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, textPane,gridPanel);
         splitPane.setOneTouchExpandable(true);
         splitPane.setDividerLocation(150);

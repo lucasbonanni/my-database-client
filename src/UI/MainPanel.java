@@ -6,12 +6,16 @@ import java.awt.event.KeyEvent;
 
 public class MainPanel extends JFrame {
     JMenuBar mb;
+    QueryEditor queryEditor;
 
     public MainPanel() {
         super("SQL Client");
         mb = new JMenuBar();
         JMenu fileMenu = createMenu("Archivo", KeyEvent.VK_F,mb);
+        JMenu ejecute = createMenu("Ejecutar", KeyEvent.VK_F,mb);
+
         mb.add(fileMenu);
+        mb.add(ejecute);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         SplitPanel splitPaneDemo = new SplitPanel();
