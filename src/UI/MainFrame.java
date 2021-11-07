@@ -28,12 +28,12 @@ public class MainFrame extends JFrame {
         this.queryEditorPane.build();
         this.treeViewPane.build();
         this.mainMenuBar.build();
-        var archivo = this.mainMenuBar.getArchivo();
+        JMenu archivo = this.mainMenuBar.getArchivo();
         archivo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String text = queryEditorPane.getText();
-                ExecuteQuery(text);
+                //ExecuteQuery(text);
             }
         });
 

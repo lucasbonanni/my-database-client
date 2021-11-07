@@ -1,6 +1,7 @@
 package UI;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class MainMenuBar extends JMenuBar {
     private JMenu archivo;
@@ -11,9 +12,7 @@ public class MainMenuBar extends JMenuBar {
     }
 
     public void build(){
-        /*JMenuItem abrir = new JMenuItem();
-        abrir.setText("Abrir");*/
-        //archivo.add(abrir);
+        this.setBackground(Color.white);
         archivo.setText("Archivo");
         super.add(archivo);
     }

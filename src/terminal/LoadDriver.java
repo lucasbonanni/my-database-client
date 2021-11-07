@@ -14,7 +14,7 @@ public class LoadDriver {
 
         File jarFile = new File("C:/temp/postgresql-42.2.24.jar");
 
-        var exist = jarFile.exists();
+        boolean exist = jarFile.exists();
         URL jarUrl = null;
         try {
             jarUrl = jarFile.toURI().toURL();
@@ -64,7 +64,7 @@ public class LoadDriver {
 
             //3. Create components and put them in the frame.
             //...create emptyLabel...
-            var emptyLabel = new JLabel();
+            JLabel emptyLabel = new JLabel();
             emptyLabel.setText("prueba de label");
 
             frame.getContentPane().add(emptyLabel, BorderLayout.CENTER);

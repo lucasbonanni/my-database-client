@@ -19,7 +19,9 @@ public class GridPane extends JScrollPane {
 
     public GridPane(){
         super();
-        table = new JTable();
+        Object[] columns = {"*"};
+        String[][] data = {{""}};
+        table = new JTable(data,columns);
     }
 
     public void build(){
