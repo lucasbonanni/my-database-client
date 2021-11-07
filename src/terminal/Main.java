@@ -1,14 +1,26 @@
 package terminal;
 
+import dbConnection.ExecuteStatamentEvent;
+
+import javax.swing.*;
+import javax.swing.event.EventListenerList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
+import java.util.function.Function;
 
 public class Main {
+    private EventListenerList listenerList = new EventListenerList();
+
     public static void main(String[] args) {
-        String query = null;
+        /*String query = null;
         //Inicializar conexión.
         Connection conn = initializeConnection();
         try {
@@ -24,9 +36,7 @@ public class Main {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
-
-
+        }*/
     }
 
     private static Connection initializeConnection()
@@ -54,12 +64,12 @@ public class Main {
         }
         return conn;
     }
-
+/*
     private static String ExecuteStatement(Connection conn, String query){
         StringBuilder builder = new StringBuilder();
         try {
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(query); /* Sirver para cualquier query, update, delete, etc.view */
+            ResultSet rs = st.executeQuery(query); /* Sirver para cualquier query, update, delete, etc.view
             var r = rs.getMetaData();
             r.getColumnCount();
             String columns = "";
@@ -83,5 +93,47 @@ public class Main {
             e.printStackTrace();
         }
         return "";
+    }*/
+
+    public void ExcecuteStatement2(Connection conn, String query){
+        StringBuilder builder = new StringBuilder();
+        try {
+            Statement st = conn.createStatement();
+
+            ResultSet rs = st.executeQuery(query); /* Sirver para cualquier query, update, delete, etc.view */
+            this.fireActionPerformed(rs);
+            rs.close();
+            st.close();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void fireActionPerformed(ResultSet rs) {
+        // Guaranteed to return a non-null array
+        Object[] listeners = listenerList.getListenerList();
+        ExecuteStatamentEvent e = null;
+        // Process the listeners last to first, notifying
+        // those that are interested in this event
+        for (int i = listeners.length-2; i>=0; i-=2) {
+            if (listeners[i]==ActionListener.class) {
+                 e = new ExecuteStatamentEvent(columns,data,this,
+                            ActionEvent.ACTION_PERFORMED,
+                            "actionCommand");
+
+                ((ActionListener)listeners[i+1]).actionPerformed(e);
+            }
+        }
+    }
+
+
+
+
+    public void ExecuteQuery(String query){
+        //Inicializar conexión.
+        Connection conn = initializeConnection();
+        ExcecuteStatement2(conn,query);
     }
 }

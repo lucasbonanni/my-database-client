@@ -10,7 +10,7 @@
             String url = "jdbc:postgresql://localhost:5432/bm_ar_tax_company00";
             Properties props = new Properties();
             props.setProperty("user","postgres");
-            props.setProperty("password","-PhilBert34");
+            prop.setProperty("password", "password");
             //props.setProperty("ssl","true");
             //try {
             Connection conn = DriverManager.getConnection(url, props);
