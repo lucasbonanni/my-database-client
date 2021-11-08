@@ -1,19 +1,18 @@
 package UI;
 
+import dbConnection.ExecuteStatamentEvent;
+
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 
-public class GridPane extends JScrollPane {
+public class GridPane extends JScrollPane implements ActionListener {
 
     JTable table;
 
@@ -74,6 +73,22 @@ public class GridPane extends JScrollPane {
 
         return new DefaultTableModel(data, columnNames);
 
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+        ExecuteStatamentEvent event = (ExecuteStatamentEvent) e;
+        /*JDialog dialog = new JDialog();
+        dialog.setPreferredSize(new Dimension(100,100));
+        dialog.setTitle("Llego");
+        dialog.setVisible(true);*/
+
+        try {
+            this.showResults(event.getResultSet());
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 }
 

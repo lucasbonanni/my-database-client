@@ -5,10 +5,16 @@ import java.sql.ResultSet;
 
 public class ExecuteStatamentEvent extends ActionEvent {
 
+
+
     private ResultSet resultSet;
     public ExecuteStatamentEvent(ResultSet rs, Object source, int id, String command) {
         super(source, id, command);
         this.resultSet =  rs;
+    }
+
+    public ResultSet getResultSet() {
+        return resultSet;
     }
 /*
     public ExecuteStatamentEvent(Object source, int id, String command, int modifiers) {

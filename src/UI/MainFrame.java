@@ -1,18 +1,21 @@
 package UI;
 
-import terminal.Main;
+import dbConnection.ConnectionData;
 
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class MainFrame extends JFrame {
     GridPane gridPane;
     QueryEditorPane queryEditorPane;
     TreeViewPane treeViewPane;
     MainMenuBar mainMenuBar;
+    ConnectionData connectionData;
     protected EventListenerList listenerList = new EventListenerList();
 
     public MainFrame(){
@@ -21,6 +24,7 @@ public class MainFrame extends JFrame {
         queryEditorPane = new QueryEditorPane();
         this.treeViewPane = new TreeViewPane();
         this.mainMenuBar = new MainMenuBar();
+        connectionData = new ConnectionData();
     }
 
     public void build(){
@@ -28,14 +32,42 @@ public class MainFrame extends JFrame {
         this.queryEditorPane.build();
         this.treeViewPane.build();
         this.mainMenuBar.build();
+        this.connectionData.addListener(gridPane);
         JMenu archivo = this.mainMenuBar.getArchivo();
-        archivo.addActionListener(new ActionListener() {
+        archivo.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String text = queryEditorPane.getText();
+                connectionData.executeQuery(text);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+/*        archivo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String text = queryEditorPane.getText();
-                //ExecuteQuery(text);
+                connectionData.executeQuery(text);
             }
-        });
+        });*/
 
         getContentPane().add(mainMenuBar, BorderLayout.NORTH);
         getContentPane().add(treeViewPane, BorderLayout.WEST);
