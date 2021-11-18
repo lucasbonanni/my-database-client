@@ -16,6 +16,7 @@ public class MainFrame extends JFrame {
     TreeViewPane treeViewPane;
     MainMenuBar mainMenuBar;
     ConnectionData connectionData;
+    JToolBar actions;
     protected EventListenerList listenerList = new EventListenerList();
 
     public MainFrame(){
@@ -25,6 +26,11 @@ public class MainFrame extends JFrame {
         this.treeViewPane = new TreeViewPane();
         this.mainMenuBar = new MainMenuBar();
         connectionData = new ConnectionData();
+        actions.add(new JButton("Ejecutar"));
+        JComboBox<String> combo = new JComboBox();
+        combo.addItem("item 1");
+        combo.addItem("item 2");
+        actions.add(combo);
     }
 
     public void build(){
@@ -69,10 +75,14 @@ public class MainFrame extends JFrame {
             }
         });*/
 
-        getContentPane().add(mainMenuBar, BorderLayout.NORTH);
+        this.setJMenuBar(mainMenuBar);
+        JTabbedPane tabbed = new JTabbedPane();
+        tabbed.add("result 1",gridPane);
+        tabbed.add("result 2",new JPanel());
+        getContentPane().add(actions, BorderLayout.PAGE_START);
         getContentPane().add(treeViewPane, BorderLayout.WEST);
         getContentPane().add(queryEditorPane, BorderLayout.CENTER);
-        getContentPane().add(gridPane, BorderLayout.SOUTH);
+        getContentPane().add(tabbed, BorderLayout.SOUTH);
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(new Dimension(500, 500));
