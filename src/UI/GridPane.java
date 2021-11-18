@@ -3,6 +3,7 @@ package UI;
 import dbConnection.ExecuteStatamentEvent;
 
 import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -25,17 +26,11 @@ public class GridPane extends JScrollPane implements ActionListener {
 
     public void build(){
         setLayout(new ScrollPaneLayout.UIResource());
-        setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED);
-        setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        setViewport(createViewport());
-        setVerticalScrollBar(createVerticalScrollBar());
-        setHorizontalScrollBar(createHorizontalScrollBar());
-        if (table != null) {
-            setViewportView(table);
-        }
-        //setUIProperty("opaque",true);
+        setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_ALWAYS);
+        setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_ALWAYS);
+        this.setPreferredSize(new Dimension(500,300));
+        this.setMinimumSize(new Dimension(10,10));
         updateUI();
-
         if (!this.getComponentOrientation().isLeftToRight()) {
             viewport.setViewPosition(new Point(Integer.MAX_VALUE, 0));
         }
@@ -45,6 +40,7 @@ public class GridPane extends JScrollPane implements ActionListener {
         //this.table = new JTable(data,columns);
         // It creates and displays the table
         table = new JTable(buildTableModel(rs));
+        table.getTableHeader().setBackground(Color.lightGray);
         setViewportView(table);
         updateUI();
     }
