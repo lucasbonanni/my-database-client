@@ -6,10 +6,10 @@ import java.awt.*;
 
 public class QueryEditorPane extends JScrollPane {
 
-    private final JTextArea textArea;
+    private final JEditorPane textArea;
 
     public QueryEditorPane(){
-        this.textArea = new JTextArea();
+        this.textArea = new JEditorPane();
     }
 
     public void build(){
