@@ -9,6 +9,8 @@ import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Arrays;
+import java.util.Vector;
 
 public class ConnectionManagerWindow extends JDialog implements ItemListener {
     private final int pad = 5;
@@ -37,6 +39,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
     private boolean isEditing;
     private boolean isNew;
     private ConnectionData selectedItem;
+
 
     public ConnectionManagerWindow(Frame owner) {
         super(owner, "Manager de conexiones",true);
@@ -72,6 +75,16 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
 
         JPanel connectionsPanel = new JPanel();
         connectionsPanel.add(connections);
+
+        btnNew.addActionListener((e -> {
+            this.selectedItem = new ConnectionData();
+            this.connections.addItem(this.selectedItem);
+            this.connections.setSelectedItem(this.selectedItem);
+        }));
+        btnDelete.addActionListener((e -> {
+            this.connections.removeItem(this.selectedItem);
+            this.selectedItem = (ConnectionData) this.connections.getSelectedItem();
+        }));
         JPanel buttons = new JPanel();
         buttons.add(btnNew);
         buttons.add(btnDelete);
