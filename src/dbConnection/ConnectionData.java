@@ -3,10 +3,11 @@ package dbConnection;
 import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 import java.sql.*;
 import java.util.Properties;
 
-public class ConnectionData {
+public class ConnectionData implements Serializable {
     private String host;
     private int port;
     private String databaseName;

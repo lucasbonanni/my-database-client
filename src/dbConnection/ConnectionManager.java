@@ -5,18 +5,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConnectionManager {
-    private boolean isConnected;
-    private IDatabase database;
+    private static final String connectionsFileName = "connections.dat";
 
-    private static final String connectionsFileName = "conections.dat";
-    
-    public void Connect(){
-        this.Connect(this.database);
+    private static ConnectionManager instance = null;
+
+    private boolean isConnected;
+
+
+    private ConnectionManager() {
     }
 
-
-
-    private void Connect(IDatabase database) {
+    public static ConnectionManager GetInstance(){
+        if(instance == null){
+            instance = new ConnectionManager();
+        }
+        return instance;
     }
 
     public boolean IsConnected(){
@@ -34,7 +37,7 @@ public class ConnectionManager {
 
         try {
             out = new ObjectOutputStream(new BufferedOutputStream(
-                    new FileOutputStream(connectionsFileName)));
+                    new FileOutputStream(connectionsFileName,false)));
 
             for (ConnectionData connectionData: connections) {
                 out.writeObject(connectionData);
@@ -86,5 +89,9 @@ public class ConnectionManager {
         ConnectionData data1 = new ConnectionData("host 1", 5555,"Conexion 1");
         ConnectionData data2 = new ConnectionData("host 2", 3000,"Conexion 2");
         return new ConnectionData[] {data1,data2};
+    }
+
+    public void setAndSave(List<ConnectionData> connections) {
+        this.saveConnectionsData(connections);
     }
 }

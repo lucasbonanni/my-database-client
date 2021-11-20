@@ -16,7 +16,8 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
     private final int pad = 5;
 
     ConnectionManager connectionManager;
-    JComboBox<ConnectionData> connections;
+    JComboBox<ConnectionData> connectionsCombo;
+    Vector<ConnectionData> connectionDataVector;
     JToolBar toolBar;
     JButton btnNew;
     JButton btnSave;
@@ -43,7 +44,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
 
     public ConnectionManagerWindow(Frame owner) {
         super(owner, "Manager de conexiones",true);
-        connections = new JComboBox<ConnectionData>();
+        connectionsCombo = new JComboBox<ConnectionData>();
         toolBar = new JToolBar();
         btnNew = new JButton("Nuevo");
         btnSave = new JButton("Guardar");
@@ -61,29 +62,23 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
         passwordLbl = new JLabel("Contraseña");
         driverLbl = new JLabel("Driver");
 
-        btnAccept = new JButton("Acceptar");
+        btnAccept = new JButton("Acceptar y guardar");
         btnCancel = new JButton("Cancelar");
 
-        connectionManager = new ConnectionManager();
+        connectionManager = ConnectionManager.GetInstance();
     }
 
     public void build(){
-
-        connections = new JComboBox<ConnectionData>(connectionManager.getConnections());
-
-        connections.addItemListener(this);
-
-        JPanel connectionsPanel = new JPanel();
-        connectionsPanel.add(connections);
+        JPanel connectionsPanel = InitializeData();
 
         btnNew.addActionListener((e -> {
             this.selectedItem = new ConnectionData();
-            this.connections.addItem(this.selectedItem);
-            this.connections.setSelectedItem(this.selectedItem);
+            this.connectionsCombo.addItem(this.selectedItem);
+            this.connectionsCombo.setSelectedItem(this.selectedItem);
         }));
         btnDelete.addActionListener((e -> {
-            this.connections.removeItem(this.selectedItem);
-            this.selectedItem = (ConnectionData) this.connections.getSelectedItem();
+            this.connectionsCombo.removeItem(this.selectedItem);
+            this.selectedItem = (ConnectionData) this.connectionsCombo.getSelectedItem();
         }));
         JPanel buttons = new JPanel();
         buttons.add(btnNew);
@@ -148,9 +143,26 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
             }
         });*/
         btnCancel.addActionListener((e) -> { dispose();}); // Dispose de modal
+        btnAccept.addActionListener((e) -> {
+            connectionManager.setAndSave(this.connectionDataVector);
+            dispose();
+        });
         bottomButtons.add(btnAccept);
         bottomButtons.add(btnCancel);
         this.add(bottomButtons,BorderLayout.PAGE_END);
+    }
+
+    private JPanel InitializeData() {
+        this.connectionDataVector = new Vector<ConnectionData>(Arrays.asList(connectionManager.getConnections()));
+        connectionsCombo = new JComboBox<ConnectionData>(connectionDataVector);
+
+        connectionsCombo.addItemListener(this);
+        this.selectedItem = (ConnectionData) connectionsCombo.getSelectedItem();
+        this.fillForm();
+
+        JPanel connectionsPanel = new JPanel();
+        connectionsPanel.add(connectionsCombo);
+        return connectionsPanel;
     }
 
 
