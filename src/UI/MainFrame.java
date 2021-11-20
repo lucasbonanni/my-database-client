@@ -69,6 +69,9 @@ public class MainFrame extends JFrame {
                 connectionData.executeQuery(text);
             }
         });*/
+        JMenuItem connectionManager = this.mainMenuBar.getConnectionManager();
+        ConnectionManagerMouseAdapter managerMouseAdapter = new ConnectionManagerMouseAdapter(this);
+        connectionManager.addActionListener(managerMouseAdapter);
 
         this.setJMenuBar(mainMenuBar);
         JTabbedPane tabbed = new JTabbedPane();
