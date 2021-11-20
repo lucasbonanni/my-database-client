@@ -15,13 +15,6 @@ public class ConnectionManagerMouseAdapter implements ActionListener {
     }
 
 
-    public void mouseClicked(MouseEvent e) {
-        ConnectionManagerWindow managerWindow = new ConnectionManagerWindow(this.main);
-        managerWindow.build();
-        managerWindow.setVisible(true);
-
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         ConnectionManagerWindow managerWindow = new ConnectionManagerWindow(this.main);
