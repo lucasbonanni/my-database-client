@@ -2,7 +2,6 @@ package UI;
 
 import dbConnection.ConnectionData;
 import dbConnection.ConnectionManager;
-import dbConnection.DBDriver;
 
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
@@ -34,13 +33,14 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
     JLabel passwordLbl;
     JLabel driverLbl;
     JLabel databaseNameLbl;
-    JLabel driverNameLbl;
+
 
     JButton btnNew;
     JButton btnSave;
     JButton btnDelete;
     JButton btnAccept;
     JButton btnCancel;
+
 
     private boolean isEditing;
     private boolean isNew;
@@ -65,6 +65,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
         btnNew = new JButton("Nuevo");
         btnSave = new JButton("Guardar");
         btnDelete = new JButton("Eliminar");
+        btnSave = new JButton("Guardar");
     }
 
     private void initializeLabels() {
@@ -98,9 +99,20 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
             this.connectionsCombo.removeItem(this.selectedItem);
             this.selectedItem = (ConnectionData) this.connectionsCombo.getSelectedItem();
         }));
+        btnSave.addActionListener((e -> {
+            this.selectedItem.setDatabaseName(this.databaseNameField.getText());
+            this.selectedItem.setDriverName(this.driverNameField.getText());
+            this.selectedItem.setHost(this.hostField.getText());
+            String pass = String.valueOf(this.passwordField.getPassword());
+            this.selectedItem.setPassword(pass);
+            this.selectedItem.setUserName(this.userField.getText());
+            this.selectedItem.setPort(Integer.parseInt(this.portField.getText()));
+            this.connectionsCombo.updateUI();
+        }));
         JPanel buttons = new JPanel();
         buttons.add(btnNew);
         buttons.add(btnDelete);
+        buttons.add(btnSave);
         toolBar.add(connectionsPanel);
         toolBar.add(buttons);
         this.add(toolBar, BorderLayout.PAGE_START);
