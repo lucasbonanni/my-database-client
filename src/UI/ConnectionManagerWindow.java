@@ -25,8 +25,8 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
     JTextField userField;
     JTextField databaseNameField;
     JPasswordField passwordField;
+    JTextField driverNameField;
 
-    JComboBox<DBDriver> driverJComboBox;
 
     JLabel hostLbl;
     JLabel portLbl;
@@ -34,6 +34,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
     JLabel passwordLbl;
     JLabel driverLbl;
     JLabel databaseNameLbl;
+    JLabel driverNameLbl;
 
     JButton btnNew;
     JButton btnSave;
@@ -53,7 +54,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
         initializeLabels();
         initializeButtons();
         connectionManager = ConnectionManager.GetInstance();
-        driverJComboBox = new JComboBox<DBDriver>();
+
         connectionsCombo = new JComboBox<ConnectionData>();
         this.setBounds(20,20,500,300);
     }
@@ -73,6 +74,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
         passwordLbl = new JLabel("Contraseña");
         driverLbl = new JLabel("Driver");
         databaseNameLbl = new JLabel("Base de datos");
+        driverLbl = new JLabel("Driver");
     }
 
     private void initializeFields() {
@@ -81,6 +83,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
         userField = new JTextField();
         databaseNameField = new JTextField();
         passwordField = new JPasswordField();
+        driverNameField = new JTextField();
     }
 
     public void build(){
@@ -118,43 +121,53 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
         constraints.ipadx = pad;
         constraints.gridx = 0;
         constraints.gridy = 0;
+        formPanel.add(driverLbl,constraints);
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        formPanel.add(driverNameField,constraints);
+        // Cambiar desde acá
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.ipady = pad;
+        constraints.ipadx = pad;
+        constraints.gridx = 0;
+        constraints.gridy = 1;
         formPanel.add(hostLbl,constraints);
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 1;
-        constraints.gridy = 0;
+        constraints.gridy = 1;
         formPanel.add(hostField,constraints);
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 2;
-        constraints.gridy = 0;
+        constraints.gridy = 1;
         formPanel.add(portLbl,constraints);
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 3;
-        constraints.gridy = 0;
+        constraints.gridy = 1;
         formPanel.add(portField,constraints);
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 0;
-        constraints.gridy = 1;
+        constraints.gridy = 2;
         formPanel.add(databaseNameLbl,constraints);
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 1;
-        constraints.gridy = 1;
+        constraints.gridy = 2;
         formPanel.add(databaseNameField,constraints);
-        // Cambiar numeración
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 0;
-        constraints.gridy = 2;
+        constraints.gridy = 3;
         formPanel.add(userLbl,constraints);
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 1;
-        constraints.gridy = 2;
+        constraints.gridy = 3;
         formPanel.add(userField,constraints);
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 0;
-        constraints.gridy = 3;
+        constraints.gridy = 4;
         formPanel.add(passwordLbl,constraints);
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 1;
-        constraints.gridy = 3;
+        constraints.gridy = 4;
         formPanel.add(passwordField,constraints);
         this.add(formPanel, BorderLayout.CENTER);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -215,5 +228,6 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
         this.databaseNameField.setText("" + this.selectedItem.getDatabaseName());
         this.userField.setText("" + this.selectedItem.getUser());
         this.passwordField.setText("" + this.selectedItem.getPassword());
+        this.driverNameField.setText("" + this.selectedItem.getDriverName());
     }
 }

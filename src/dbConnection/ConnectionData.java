@@ -8,6 +8,7 @@ import java.sql.*;
 import java.util.Properties;
 
 public class ConnectionData implements Serializable {
+    private String driverName;
     private String host;
     private int port;
     private String databaseName;
@@ -31,7 +32,8 @@ public class ConnectionData implements Serializable {
     public ConnectionData() {
     }
 
-    public ConnectionData(String host, int port, String databaseName,String userName, String password) {
+    public ConnectionData(String driverName, String host, int port, String databaseName, String userName, String password) {
+        this.driverName = driverName;
         this.host = host;
         this.port = port;
         this.databaseName = databaseName;
@@ -139,5 +141,9 @@ public class ConnectionData implements Serializable {
 
     public String getUser() {
         return this.userName;
+    }
+
+    public String getDriverName() {
+        return this.driverName;
     }
 }
