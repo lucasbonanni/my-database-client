@@ -34,4 +34,8 @@ public class QueryEditorPane extends JScrollPane {
     public String getText(){
         return this.textArea.getText();
     }
+
+    public void clearText(){
+        this.textArea.setText("");
+    }
 }

@@ -71,6 +71,9 @@ public class MainFrame extends JFrame {
                 connectionData.executeQuery(text);
             }
         });*/
+        toolBar.addBtnClearTextAction((e -> {
+            this.queryEditorPane.clearText();
+        }));
         JMenuItem connectionManager = this.mainMenuBar.getConnectionManager();
         ConnectionManagerMouseAdapter managerMouseAdapter = new ConnectionManagerMouseAdapter(this);
         connectionManager.addActionListener(managerMouseAdapter);
@@ -79,7 +82,6 @@ public class MainFrame extends JFrame {
         JTabbedPane tabbed = new JTabbedPane();
         tabbed.setForeground(Color.black);
         tabbed.add("result 1",gridPane);
-        tabbed.add("result 2",new JPanel());
         getContentPane().add(toolBar, BorderLayout.PAGE_START);
         getContentPane().add(treeViewPane, BorderLayout.WEST);
         getContentPane().add(queryEditorPane, BorderLayout.CENTER);

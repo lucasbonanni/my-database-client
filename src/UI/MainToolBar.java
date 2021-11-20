@@ -1,6 +1,7 @@
 package UI;
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
 
 public class MainToolBar extends JToolBar {
 
@@ -32,6 +33,10 @@ public class MainToolBar extends JToolBar {
         JPanel panel3 = new JPanel();
         panel3.add(btnClearText);
         this.add(panel3);
+    }
+
+    public void addBtnClearTextAction(ActionListener l){
+        btnClearText.addActionListener(l);
     }
 
 }
