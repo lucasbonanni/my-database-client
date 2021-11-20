@@ -16,6 +16,7 @@ public class TreeViewPane extends JScrollPane {
         setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED);
         setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
         setViewport(createViewport());
+        this.setPreferredSize(new Dimension(200,500));
         setVerticalScrollBar(createVerticalScrollBar());
         setHorizontalScrollBar(createHorizontalScrollBar());
         if (view != null) {

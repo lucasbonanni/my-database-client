@@ -5,8 +5,6 @@ import dbConnection.ConnectionData;
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -74,6 +72,7 @@ public class MainFrame extends JFrame {
 
         this.setJMenuBar(mainMenuBar);
         JTabbedPane tabbed = new JTabbedPane();
+        tabbed.setForeground(Color.black);
         tabbed.add("result 1",gridPane);
         tabbed.add("result 2",new JPanel());
         getContentPane().add(toolBar, BorderLayout.PAGE_START);
