@@ -1,17 +1,19 @@
 package UI;
 
 import dbConnection.ConnectionData;
+import dbConnection.ConnectionManager;
 import dbConnection.DBDriver;
 
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
-public class ConnectionManagerWindow extends JDialog {
+public class ConnectionManagerWindow extends JDialog implements ItemListener {
     private final int pad = 5;
 
+    ConnectionManager connectionManager;
     JComboBox<ConnectionData> connections;
     JToolBar toolBar;
     JButton btnNew;
@@ -31,6 +33,10 @@ public class ConnectionManagerWindow extends JDialog {
 
     JButton btnAccept;
     JButton btnCancel;
+
+    private boolean isEditing;
+    private boolean isNew;
+    private ConnectionData selectedItem;
 
     public ConnectionManagerWindow(Frame owner) {
         super(owner, "Manager de conexiones",true);
@@ -54,9 +60,16 @@ public class ConnectionManagerWindow extends JDialog {
 
         btnAccept = new JButton("Acceptar");
         btnCancel = new JButton("Cancelar");
+
+        connectionManager = new ConnectionManager();
     }
 
     public void build(){
+
+        connections = new JComboBox<ConnectionData>(connectionManager.getConnections());
+
+        connections.addItemListener(this);
+
         JPanel connectionsPanel = new JPanel();
         connectionsPanel.add(connections);
         JPanel buttons = new JPanel();
@@ -115,12 +128,13 @@ public class ConnectionManagerWindow extends JDialog {
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         JPanel bottomButtons = new JPanel();
-        btnCancel.addActionListener(new ActionListener() {
+        /*btnCancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
             }
-        });
+        });*/
+        btnCancel.addActionListener((e) -> { dispose();}); // Dispose de modal
         bottomButtons.add(btnAccept);
         bottomButtons.add(btnCancel);
         this.add(bottomButtons,BorderLayout.PAGE_END);
@@ -139,4 +153,15 @@ public class ConnectionManagerWindow extends JDialog {
     }
 
 
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        this.selectedItem = (ConnectionData) e.getItem();
+        this.fillForm();
+    }
+
+    private void fillForm(){
+        this.hostField.setText(this.selectedItem.getHost());
+        this.portField.setText("" + this.selectedItem.getPort());
+    }
 }

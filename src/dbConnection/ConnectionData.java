@@ -3,21 +3,36 @@ package dbConnection;
 import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.InputStream;
-import java.io.Reader;
-import java.math.BigDecimal;
-import java.net.URL;
 import java.sql.*;
-import java.util.Calendar;
-import java.util.Map;
 import java.util.Properties;
 
 public class ConnectionData {
     private String host;
-    private String port;
+    private int port;
     private String databaseName;
     private IDBDriver driver;
     private Properties properties;
+
+    public String getHost() {
+        return host;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public String getDatabaseName() {
+        return databaseName;
+    }
+
+    public ConnectionData() {
+    }
+
+    public ConnectionData(String host, int port, String databaseName) {
+        this.host = host;
+        this.port = port;
+        this.databaseName = databaseName;
+    }
 
     private EventListenerList listenerList = new EventListenerList();
 
@@ -106,5 +121,10 @@ public class ConnectionData {
         //Inicializar conexión.
         Connection conn = initializeConnection();
         excecuteStatement(conn,query);
+    }
+
+    @Override
+    public String toString() {
+        return databaseName;
     }
 }

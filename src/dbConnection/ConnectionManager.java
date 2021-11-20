@@ -81,5 +81,10 @@ public class ConnectionManager {
         return resultado;
     }
 
+    public ConnectionData[] getConnections(){
 
+        ConnectionData data1 = new ConnectionData("host 1", 5555,"Conexion 1");
+        ConnectionData data2 = new ConnectionData("host 2", 3000,"Conexion 2");
+        return new ConnectionData[] {data1,data2};
+    }
 }
