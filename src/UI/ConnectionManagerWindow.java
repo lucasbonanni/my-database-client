@@ -6,6 +6,8 @@ import dbConnection.DBDriver;
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ConnectionManagerWindow extends JDialog {
     private final int pad = 5;
@@ -13,6 +15,7 @@ public class ConnectionManagerWindow extends JDialog {
     JComboBox<ConnectionData> connections;
     JToolBar toolBar;
     JButton btnNew;
+    JButton btnSave;
     JButton btnDelete;
     JTextField hostField;
     JFormattedTextField portField;
@@ -26,11 +29,15 @@ public class ConnectionManagerWindow extends JDialog {
     JLabel passwordLbl;
     JLabel driverLbl;
 
+    JButton btnAccept;
+    JButton btnCancel;
+
     public ConnectionManagerWindow(Frame owner) {
         super(owner, "Manager de conexiones",true);
         connections = new JComboBox<ConnectionData>();
         toolBar = new JToolBar();
         btnNew = new JButton("Nuevo");
+        btnSave = new JButton("Guardar");
         btnDelete = new JButton("Eliminar");
         hostField = new JTextField();
         portField = new JFormattedTextField(createHostFormatter("####"));
@@ -44,6 +51,9 @@ public class ConnectionManagerWindow extends JDialog {
         userLbl = new JLabel("Usuario");
         passwordLbl = new JLabel("Contraseña");
         driverLbl = new JLabel("Driver");
+
+        btnAccept = new JButton("Acceptar");
+        btnCancel = new JButton("Cancelar");
     }
 
     public void build(){
@@ -101,8 +111,19 @@ public class ConnectionManagerWindow extends JDialog {
         constraints.gridx = 1;
         constraints.gridy = 2;
         formPanel.add(passwordField,constraints);
-        this.add(formPanel);
+        this.add(formPanel, BorderLayout.CENTER);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+        JPanel bottomButtons = new JPanel();
+        btnCancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+        bottomButtons.add(btnAccept);
+        bottomButtons.add(btnCancel);
+        this.add(bottomButtons,BorderLayout.PAGE_END);
     }
 
 

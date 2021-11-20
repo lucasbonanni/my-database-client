@@ -34,6 +34,8 @@ public class MainFrame extends JFrame {
         this.mainMenuBar.build();
         this.toolBar.build();
         this.connectionData.addListener(gridPane);
+        UIManager.put("MenuBar.background",Color.white);
+        this.setBackground(Color.white);
         JButton btnExecute = this.toolBar.getBtnExecute();
         btnExecute.addMouseListener(new MouseListener() {
             @Override

@@ -26,7 +26,6 @@ public class MainMenuBar extends JMenuBar {
         archivo.setEnabled(false);
         super.add(archivo);
         connectionManager = new JMenuItem("Administrar conexiones");
-
         connections.add(connectionManager);
         super.add(connections);
     }
