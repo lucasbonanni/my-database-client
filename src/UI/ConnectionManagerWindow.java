@@ -19,13 +19,13 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
     JComboBox<ConnectionData> connectionsCombo;
     Vector<ConnectionData> connectionDataVector;
     JToolBar toolBar;
-    JButton btnNew;
-    JButton btnSave;
-    JButton btnDelete;
+
     JTextField hostField;
     JFormattedTextField portField;
     JTextField userField;
+    JTextField databaseNameField;
     JPasswordField passwordField;
+
     JComboBox<DBDriver> driverJComboBox;
 
     JLabel hostLbl;
@@ -33,7 +33,11 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
     JLabel userLbl;
     JLabel passwordLbl;
     JLabel driverLbl;
+    JLabel databaseNameLbl;
 
+    JButton btnNew;
+    JButton btnSave;
+    JButton btnDelete;
     JButton btnAccept;
     JButton btnCancel;
 
@@ -44,28 +48,39 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
 
     public ConnectionManagerWindow(Frame owner) {
         super(owner, "Manager de conexiones",true);
-        connectionsCombo = new JComboBox<ConnectionData>();
         toolBar = new JToolBar();
+        initializeFields();
+        initializeLabels();
+        initializeButtons();
+        connectionManager = ConnectionManager.GetInstance();
+        driverJComboBox = new JComboBox<DBDriver>();
+        connectionsCombo = new JComboBox<ConnectionData>();
+        this.setBounds(20,20,500,300);
+    }
+
+    private void initializeButtons() {
+        btnAccept = new JButton("Acceptar y guardar");
+        btnCancel = new JButton("Cancelar");
         btnNew = new JButton("Nuevo");
         btnSave = new JButton("Guardar");
         btnDelete = new JButton("Eliminar");
-        hostField = new JTextField();
-        portField = new JFormattedTextField(createHostFormatter("####"));
-        userField = new JTextField();
-        passwordField = new JPasswordField();
-        driverJComboBox = new JComboBox<DBDriver>();
-        this.setBounds(20,20,500,300);
+    }
 
+    private void initializeLabels() {
         hostLbl = new JLabel("Host");
         portLbl = new JLabel("Port");
         userLbl = new JLabel("Usuario");
         passwordLbl = new JLabel("Contraseña");
         driverLbl = new JLabel("Driver");
+        databaseNameLbl = new JLabel("Base de datos");
+    }
 
-        btnAccept = new JButton("Acceptar y guardar");
-        btnCancel = new JButton("Cancelar");
-
-        connectionManager = ConnectionManager.GetInstance();
+    private void initializeFields() {
+        hostField = new JTextField();
+        portField = new JFormattedTextField(createHostFormatter("####"));
+        userField = new JTextField();
+        databaseNameField = new JTextField();
+        passwordField = new JPasswordField();
     }
 
     public void build(){
@@ -119,18 +134,27 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 0;
         constraints.gridy = 1;
-        formPanel.add(userLbl,constraints);
+        formPanel.add(databaseNameLbl,constraints);
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 1;
         constraints.gridy = 1;
-        formPanel.add(userField,constraints);
+        formPanel.add(databaseNameField,constraints);
+        // Cambiar numeración
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 0;
         constraints.gridy = 2;
-        formPanel.add(passwordLbl,constraints);
+        formPanel.add(userLbl,constraints);
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 1;
         constraints.gridy = 2;
+        formPanel.add(userField,constraints);
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        formPanel.add(passwordLbl,constraints);
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridx = 1;
+        constraints.gridy = 3;
         formPanel.add(passwordField,constraints);
         this.add(formPanel, BorderLayout.CENTER);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -188,5 +212,8 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
     private void fillForm(){
         this.hostField.setText(this.selectedItem.getHost());
         this.portField.setText("" + this.selectedItem.getPort());
+        this.databaseNameField.setText("" + this.selectedItem.getDatabaseName());
+        this.userField.setText("" + this.selectedItem.getUser());
+        this.passwordField.setText("" + this.selectedItem.getPassword());
     }
 }

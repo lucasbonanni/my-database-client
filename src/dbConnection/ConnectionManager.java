@@ -86,8 +86,8 @@ public class ConnectionManager {
 
     public ConnectionData[] getConnections(){
 
-        ConnectionData data1 = new ConnectionData("host 1", 5555,"Conexion 1");
-        ConnectionData data2 = new ConnectionData("host 2", 3000,"Conexion 2");
+        ConnectionData data1 = new ConnectionData("127.0.0.1", 5432,"World", "admin","");
+        ConnectionData data2 = new ConnectionData("127.0.0.1", 3000,"Sakila", "admin","password");
         return new ConnectionData[] {data1,data2};
     }
 

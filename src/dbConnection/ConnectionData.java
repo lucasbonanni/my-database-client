@@ -11,6 +11,8 @@ public class ConnectionData implements Serializable {
     private String host;
     private int port;
     private String databaseName;
+    private String userName;
+    private String password;
     private IDBDriver driver;
     private Properties properties;
 
@@ -29,10 +31,12 @@ public class ConnectionData implements Serializable {
     public ConnectionData() {
     }
 
-    public ConnectionData(String host, int port, String databaseName) {
+    public ConnectionData(String host, int port, String databaseName,String userName, String password) {
         this.host = host;
         this.port = port;
         this.databaseName = databaseName;
+        this.userName = userName;
+        this.password = password;
     }
 
     private EventListenerList listenerList = new EventListenerList();
@@ -126,6 +130,14 @@ public class ConnectionData implements Serializable {
 
     @Override
     public String toString() {
-        return databaseName;
+        return String.format("%s:%s/%s",host,port,databaseName);
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public String getUser() {
+        return this.userName;
     }
 }
