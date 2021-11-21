@@ -4,7 +4,6 @@ import javax.swing.event.EventListenerList;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
 
 public class GenericService {
 
@@ -22,8 +21,7 @@ public class GenericService {
     }
 
     public void executeStatement(String query){
-        Connection conn = this.connectionManager.getConnection();
-        DefaultTableModel tableModel = this.genericDao.executeStatement(conn, query);
+        DefaultTableModel tableModel = this.genericDao.executeStatement(connectionManager.getConnection(), query);
         fireActionPerformed(tableModel);
     }
 

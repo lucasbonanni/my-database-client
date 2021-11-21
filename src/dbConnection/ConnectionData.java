@@ -2,10 +2,8 @@ package dbConnection;
 
 import java.io.Serializable;
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
 public class ConnectionData implements Serializable {
     //region Atributos
@@ -15,9 +13,9 @@ public class ConnectionData implements Serializable {
     private String databaseName;
     private String userName;
     private String password;
-    //endregion
-    private IDBDriver driver;
-    private Properties properties;
+
+
+    Connection connection;
 
 
 
@@ -37,56 +35,21 @@ public class ConnectionData implements Serializable {
 
 
     public String getetUrl(){
-        return String.format("jdbc:%s://%s:%s/%s",driver.getDatabaseType(),host,port,databaseName);
+        return String.format("jdbc:%s://%s:%s/%s","mysql",host,port,databaseName);
     }
 
 
     /**
      * Se debería mover el connection manager
-     * @return Connection
      */
-    public Connection getConnection(){
-        this.driver.registerDriver();
-        Connection conn = null;
+    public void Connect(){
+        connection = null;
         try {
-            conn = DriverManager.getConnection(this.getetUrl(), this.properties);
+            connection = DriverManager.getConnection(this.getetUrl(), this.userName,this.password);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return conn;
     }
-
-    public static Connection initializeConnection()
-    {
-        String connString = "jdbc:mysql://127.0.0.1:3306/world";
-        Properties prop = new Properties();
-        prop.put("user", "usuario");
-        prop.put("password", "password");
-        try {
-            DriverManager.registerDriver((Driver) Class.forName("com.mysql.jdbc.Driver").newInstance());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        Connection conn = null;
-        try {
-            conn = DriverManager.getConnection(connString, prop);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return conn;
-    }
-
-
-
-
-
-
 
 
 
@@ -146,11 +109,23 @@ public class ConnectionData implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public Connection getConnection() {
+        return this.connection;
+    }
+
+    public void disconnect() {
+        if(this.connection != null){
+            try {
+                this.connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        this.connection = null;
+    }
     //endregion
 
-    public void setProperties(Properties properties){
-        this.properties = properties;
-    }
 
 
 }

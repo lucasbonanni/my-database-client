@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class ConnectionManager {
     private static final String connectionsFileName = "connections.dat";
@@ -21,7 +20,7 @@ public class ConnectionManager {
 
     private ConnectionManager() {
         connectionDataVector = new ArrayList<>();
-        connectionDataVector.add(new ConnectionData("org.postgresql.Driver", "127.0.0.1", 5432,"World", "admin",""));
+        connectionDataVector.add(new ConnectionData("com.mysql.jdbc.Driver", "127.0.0.1", 3306,"world", "root",""));
         connectionDataVector.add(new ConnectionData("org.postgresql.Driver", "127.0.0.1", 3000,"Sakila", "admin","password"));
     }
 
@@ -35,12 +34,6 @@ public class ConnectionManager {
     /*public boolean IsConnected(){
         return selectedConnection.isConnected();
     }*/
-    
-    public void Disconnect(){
-        
-    }
-
-
 
     public void saveConnections(ArrayList<ConnectionData> connectionDataVector) {
         ObjectOutputStream out = null;
@@ -98,8 +91,7 @@ public class ConnectionManager {
 
     public java.sql.Connection getConnection()
     {
-        //return selectedConnection.getConnection();
-        return ConnectionData.initializeConnection();
+        return selectedConnection.getConnection();
     }
 
     public ArrayList<ConnectionData> getConnections(){
@@ -131,4 +123,15 @@ public class ConnectionManager {
         this.connectionsChanged.add(ActionListener.class,actionListener);
     }
 
+    public void setSelectedConnection(ConnectionData selectedItem) {
+        this.selectedConnection = selectedItem;
+    }
+
+    public void connect() {
+        this.selectedConnection.Connect();
+    }
+
+    public void disconnect(){
+        this.selectedConnection.disconnect();
+    }
 }

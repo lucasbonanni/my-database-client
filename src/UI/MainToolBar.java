@@ -5,9 +5,11 @@ import dbConnection.ConnectionManager;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
-public class MainToolBar extends JToolBar {
+public class MainToolBar extends JToolBar implements ItemListener {
 
     private final ConnectionManager connectionManager;
     JButton btnExecute;
@@ -43,6 +45,10 @@ public class MainToolBar extends JToolBar {
         JPanel panel3 = new JPanel();
         panel3.add(btnClearText);
         this.add(panel3);
+        connectionsCombo.addItemListener(this);
+        btnConnect.addActionListener((e -> connectionManager.connect()));
+        btnDisconnect.addActionListener((e -> connectionManager.disconnect()));
+        connectionManager.setSelectedConnection((ConnectionData) this.connectionsCombo.getSelectedItem());
     }
 
     private void setComboData(){
@@ -54,4 +60,9 @@ public class MainToolBar extends JToolBar {
         btnClearText.addActionListener(l);
     }
 
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+       this.connectionManager.setSelectedConnection((ConnectionData)this.connectionsCombo.getSelectedItem());
+
+    }
 }
