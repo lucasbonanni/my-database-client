@@ -9,7 +9,7 @@ public class MainToolBar extends JToolBar {
     JButton btnClearText;
     JButton btnConnect;
     JButton btnDisconect;
-
+    ConnectionsCombo connectionsCombo;
     public JButton getBtnExecute() {
         return btnExecute;
     }
@@ -20,10 +20,13 @@ public class MainToolBar extends JToolBar {
         btnClearText = new JButton("Borrar Texto");
         btnDisconect = new JButton("Desconectar");
         btnConnect = new JButton("Conectar");
+        connectionsCombo = new ConnectionsCombo();
     }
 
     public void build(){
+        connectionsCombo.build();
         JPanel panel1 = new JPanel();
+        panel1.add(connectionsCombo);
         panel1.add(btnConnect);
         panel1.add(btnDisconect);
         this.add(panel1);
