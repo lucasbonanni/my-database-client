@@ -1,8 +1,12 @@
 package dbConnection;
 
+import javax.swing.event.EventListenerList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class ConnectionManager {
     private static final String connectionsFileName = "connections.dat";
@@ -11,7 +15,14 @@ public class ConnectionManager {
 
     private ConnectionData selectedConnection;
 
+    ArrayList<ConnectionData> connectionDataVector;
+
+    private EventListenerList connectionsChanged = new EventListenerList();
+
     private ConnectionManager() {
+        connectionDataVector = new ArrayList<>();
+        connectionDataVector.add(new ConnectionData("org.postgresql.Driver", "127.0.0.1", 5432,"World", "admin",""));
+        connectionDataVector.add(new ConnectionData("org.postgresql.Driver", "127.0.0.1", 3000,"Sakila", "admin","password"));
     }
 
     public static ConnectionManager getInstance(){
@@ -31,14 +42,14 @@ public class ConnectionManager {
 
 
 
-    private void saveConnectionsData(List<ConnectionData> connections) {
+    public void saveConnections(ArrayList<ConnectionData> connectionDataVector) {
         ObjectOutputStream out = null;
 
         try {
             out = new ObjectOutputStream(new BufferedOutputStream(
                     new FileOutputStream(connectionsFileName,false)));
 
-            for (ConnectionData connectionData: connections) {
+            for (ConnectionData connectionData: connectionDataVector) {
                 out.writeObject(connectionData);
             }
         } catch (FileNotFoundException e) {
@@ -52,6 +63,8 @@ public class ConnectionManager {
                 e.printStackTrace();
             }
         }
+        this.connectionDataVector = connectionDataVector;
+        this.fireActionPerformed(connectionsChanged,new ActionEvent(connectionDataVector,ActionEvent.ACTION_PERFORMED,"updateConnections"));
     }
 
 
@@ -89,14 +102,33 @@ public class ConnectionManager {
         return ConnectionData.initializeConnection();
     }
 
-    public ConnectionData[] getConnections(){
-
-        ConnectionData data1 = new ConnectionData("org.postgresql.Driver", "127.0.0.1", 5432,"World", "admin","");
-        ConnectionData data2 = new ConnectionData("org.postgresql.Driver", "127.0.0.1", 3000,"Sakila", "admin","password");
-        return new ConnectionData[] {data1,data2};
+    public ArrayList<ConnectionData> getConnections(){
+        return this.connectionDataVector;
     }
 
-    public void setAndSave(List<ConnectionData> connections) {
-        this.saveConnectionsData(connections);
+
+
+    protected void fireActionPerformed(EventListenerList list, ActionEvent event) {
+        // Guaranteed to return a non-null array
+        Object[] listeners = list.getListenerList();
+        ActionEvent e = null;
+        // Process the listeners last to first, notifying
+        // those that are interested in this event
+        for (int i = listeners.length-2; i>=0; i-=2) {
+            if (listeners[i]== ActionListener.class) {
+                String actionCommand = event.getActionCommand();
+                e = new ActionEvent(event.getSource(),
+                        ActionEvent.ACTION_PERFORMED,
+                        actionCommand,
+                        event.getWhen(),
+                        event.getModifiers());
+                ((ActionListener)listeners[i+1]).actionPerformed(e);
+            }
+        }
     }
+
+    public void addConnectionsChangedListener(ActionListener actionListener) {
+        this.connectionsChanged.add(ActionListener.class,actionListener);
+    }
+
 }

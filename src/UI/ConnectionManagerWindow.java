@@ -8,15 +8,14 @@ import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.Arrays;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class ConnectionManagerWindow extends JDialog implements ItemListener {
     private final int pad = 5;
 
     ConnectionManager connectionManager;
     JComboBox<ConnectionData> connectionsCombo;
-    Vector<ConnectionData> connectionDataVector;
+
     JToolBar toolBar;
 
     JTextField hostField;
@@ -89,6 +88,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
 
     public void build(){
         JPanel connectionsPanel = InitializeData();
+        connectionManager.addConnectionsChangedListener((e) -> setComboData());
 
         btnNew.addActionListener((e -> {
             this.selectedItem = new ConnectionData();
@@ -188,7 +188,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
 
         btnCancel.addActionListener((e) -> dispose()); // Dispose de modal
         btnAccept.addActionListener((e) -> {
-            connectionManager.setAndSave(this.connectionDataVector);
+            connectionManager.saveConnections(getComboItems());
             dispose();
         });
         bottomButtons.add(btnAccept);
@@ -197,9 +197,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
     }
 
     private JPanel InitializeData() {
-        this.connectionDataVector = new Vector<>(Arrays.asList(connectionManager.getConnections()));
-        connectionsCombo = new JComboBox<>(connectionDataVector);
-
+        setComboData();
         connectionsCombo.addItemListener(this);
         this.selectedItem = (ConnectionData) connectionsCombo.getSelectedItem();
         this.fillForm();
@@ -236,5 +234,18 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
         this.userField.setText("" + this.selectedItem.getUser());
         this.passwordField.setText("" + this.selectedItem.getPassword());
         this.driverNameField.setText("" + this.selectedItem.getDriverName());
+    }
+
+    private void setComboData(){
+        DefaultComboBoxModel connections = new DefaultComboBoxModel<>(((ArrayList<ConnectionData>)connectionManager.getConnections().clone()).toArray()) ;
+        connectionsCombo.setModel(connections);
+    }
+
+    private ArrayList<ConnectionData> getComboItems(){
+        ArrayList<ConnectionData> connections = new ArrayList<>();
+        for(int i = 0; i < connectionsCombo.getItemCount() ; i++ ) {
+            connections.add(connectionsCombo.getItemAt(i));
+        }
+        return connections;
     }
 }
