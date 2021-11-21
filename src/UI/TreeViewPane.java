@@ -1,11 +1,17 @@
 package UI;
 
+import dbConnection.ConnectionManager;
+
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
 import java.awt.*;
 
 public class TreeViewPane extends JScrollPane {
+
+    private final ConnectionManager connectionManager;
+
+    public TreeViewPane() {
+        connectionManager = ConnectionManager.getInstance();
+    }
 
     public void build(){
 

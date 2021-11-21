@@ -9,22 +9,21 @@ public class ConnectionManager {
 
     private static ConnectionManager instance = null;
 
-    private boolean isConnected;
-
+    private ConnectionData selectedConnection;
 
     private ConnectionManager() {
     }
 
-    public static ConnectionManager GetInstance(){
+    public static ConnectionManager getInstance(){
         if(instance == null){
             instance = new ConnectionManager();
         }
         return instance;
     }
 
-    public boolean IsConnected(){
-        return isConnected;
-    }
+    /*public boolean IsConnected(){
+        return selectedConnection.isConnected();
+    }*/
     
     public void Disconnect(){
         
@@ -82,6 +81,12 @@ public class ConnectionManager {
             }
         }
         return resultado;
+    }
+
+    public java.sql.Connection getConnection()
+    {
+        //return selectedConnection.getConnection();
+        return ConnectionData.initializeConnection();
     }
 
     public ConnectionData[] getConnections(){

@@ -53,14 +53,14 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
         initializeFields();
         initializeLabels();
         initializeButtons();
-        connectionManager = ConnectionManager.GetInstance();
+        connectionManager = ConnectionManager.getInstance();
 
-        connectionsCombo = new JComboBox<ConnectionData>();
+        connectionsCombo = new JComboBox<>();
         this.setBounds(20,20,500,300);
     }
 
     private void initializeButtons() {
-        btnAccept = new JButton("Acceptar y guardar");
+        btnAccept = new JButton("Aceptar y guardar");
         btnCancel = new JButton("Cancelar");
         btnNew = new JButton("Nuevo");
         btnSave = new JButton("Guardar");
@@ -80,7 +80,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
 
     private void initializeFields() {
         hostField = new JTextField();
-        portField = new JFormattedTextField(createHostFormatter("####"));
+        portField = new JFormattedTextField(createHostFormatter());
         userField = new JTextField();
         databaseNameField = new JTextField();
         passwordField = new JPasswordField();
@@ -185,13 +185,8 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         JPanel bottomButtons = new JPanel();
-        /*btnCancel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });*/
-        btnCancel.addActionListener((e) -> { dispose();}); // Dispose de modal
+
+        btnCancel.addActionListener((e) -> dispose()); // Dispose de modal
         btnAccept.addActionListener((e) -> {
             connectionManager.setAndSave(this.connectionDataVector);
             dispose();
@@ -202,8 +197,8 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
     }
 
     private JPanel InitializeData() {
-        this.connectionDataVector = new Vector<ConnectionData>(Arrays.asList(connectionManager.getConnections()));
-        connectionsCombo = new JComboBox<ConnectionData>(connectionDataVector);
+        this.connectionDataVector = new Vector<>(Arrays.asList(connectionManager.getConnections()));
+        connectionsCombo = new JComboBox<>(connectionDataVector);
 
         connectionsCombo.addItemListener(this);
         this.selectedItem = (ConnectionData) connectionsCombo.getSelectedItem();
@@ -215,10 +210,10 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
     }
 
 
-    protected MaskFormatter createHostFormatter(String mask) {
+    protected MaskFormatter createHostFormatter() {
         MaskFormatter formatter = null;
         try {
-            formatter = new MaskFormatter(mask);
+            formatter = new MaskFormatter("####");
         } catch (java.text.ParseException exc) {
             System.err.println("formatter is bad: " + exc.getMessage());
             System.exit(-1);

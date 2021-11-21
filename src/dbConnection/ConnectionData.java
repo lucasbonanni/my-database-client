@@ -1,34 +1,27 @@
 package dbConnection;
 
-import javax.swing.event.EventListenerList;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.Serializable;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Properties;
 
 public class ConnectionData implements Serializable {
+    //region Atributos
     private String driverName;
     private String host;
     private int port;
     private String databaseName;
     private String userName;
     private String password;
+    //endregion
     private IDBDriver driver;
     private Properties properties;
 
-    public String getHost() {
-        return host;
-    }
 
-    public int getPort() {
-        return port;
-    }
 
-    public String getDatabaseName() {
-        return databaseName;
-    }
-
+    //region Constructores
     public ConnectionData() {
     }
 
@@ -40,21 +33,18 @@ public class ConnectionData implements Serializable {
         this.userName = userName;
         this.password = password;
     }
+    //endregion
 
-    private EventListenerList listenerList = new EventListenerList();
-
-    public void addListener(ActionListener actionListener) {
-        this.listenerList.add(ActionListener.class,actionListener);
-    }
 
     public String getetUrl(){
         return String.format("jdbc:%s://%s:%s/%s",driver.getDatabaseType(),host,port,databaseName);
     }
 
-    public void setProperties(Properties properties){
-        this.properties = properties;
-    }
 
+    /**
+     * Se debería mover el connection manager
+     * @return Connection
+     */
     public Connection getConnection(){
         this.driver.registerDriver();
         Connection conn = null;
@@ -66,7 +56,7 @@ public class ConnectionData implements Serializable {
         return conn;
     }
 
-    private static Connection initializeConnection()
+    public static Connection initializeConnection()
     {
         String connString = "jdbc:mysql://127.0.0.1:3306/world";
         Properties prop = new Properties();
@@ -92,47 +82,31 @@ public class ConnectionData implements Serializable {
         return conn;
     }
 
-    public void excecuteStatement(Connection conn, String query){
-        StringBuilder builder = new StringBuilder();
-        try {
-            Statement st = conn.createStatement();
-
-            ResultSet rs = st.executeQuery(query); /* Sirver para cualquier query, update, delete, etc.view */
-            this.fireActionPerformed(rs);
-            rs.close();
-            st.close();
 
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
-    protected void fireActionPerformed(ResultSet rs) {
-        // Guaranteed to return a non-null array
-        Object[] listeners = listenerList.getListenerList();
-        ExecuteStatamentEvent e = null;
-        // Process the listeners last to first, notifying
-        // those that are interested in this event
-        for (int i = listeners.length-2; i>=0; i-=2) {
-            if (listeners[i]== ActionListener.class) {
-                e = new ExecuteStatamentEvent(rs,this,
-                        ActionEvent.ACTION_PERFORMED,
-                        "actionCommand");
-                ((ActionListener)listeners[i+1]).actionPerformed(e);
-            }
-        }
-    }
 
-    public void executeQuery(String query){
-        //Inicializar conexión.
-        Connection conn = initializeConnection();
-        excecuteStatement(conn,query);
-    }
+
+
+
 
     @Override
     public String toString() {
         return String.format("%s:%s/%s",host,port,databaseName);
+    }
+
+    //region Getters
+
+    public String getHost() {
+        return host;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public String getDatabaseName() {
+        return databaseName;
     }
 
     public String getPassword() {
@@ -146,7 +120,9 @@ public class ConnectionData implements Serializable {
     public String getDriverName() {
         return this.driverName;
     }
+    //endregion
 
+    //region Setters
     public void setDriverName(String driverName) {
         this.driverName = driverName;
     }
@@ -170,4 +146,11 @@ public class ConnectionData implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+    //endregion
+
+    public void setProperties(Properties properties){
+        this.properties = properties;
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package UI;
 
 import dbConnection.ConnectionData;
+import dbConnection.GenericService;
 
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
@@ -9,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class MainFrame extends JFrame {
+    private final GenericService genericService;
     GridPane gridPane;
     QueryEditorPane queryEditorPane;
     TreeViewPane treeViewPane;
@@ -25,6 +27,7 @@ public class MainFrame extends JFrame {
         this.mainMenuBar = new MainMenuBar();
         connectionData = new ConnectionData();
         toolBar = new MainToolBar();
+        genericService = new GenericService();
     }
 
     public void build(){
@@ -33,7 +36,7 @@ public class MainFrame extends JFrame {
         this.treeViewPane.build();
         this.mainMenuBar.build();
         this.toolBar.build();
-        this.connectionData.addListener(gridPane);
+        this.genericService.addListener(gridPane);
         UIManager.put("MenuBar.background",Color.white);
         this.setBackground(Color.white);
         JButton btnExecute = this.toolBar.getBtnExecute();
@@ -41,7 +44,7 @@ public class MainFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String text = queryEditorPane.getText();
-                connectionData.executeQuery(text);
+                genericService.executeStatement(text);
             }
 
             @Override
