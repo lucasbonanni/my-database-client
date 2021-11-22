@@ -22,9 +22,24 @@ public class GenericDao
 
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            tableModel = buildErrorTable(e);
         }
         return tableModel;
+    }
+
+    private DefaultTableModel buildErrorTable(SQLException e) {
+        Vector<String> columnNames = new Vector<String>();
+        Vector<Vector<Object>> data = new Vector<>();
+        columnNames.add("Mensaje");
+        columnNames.add("Estado");
+        columnNames.add("Codigo de error");
+        Vector<Object> row = new Vector<>();
+        row.add(e.getMessage());
+        row.add(e.getSQLState());
+        row.add(e.getErrorCode());
+        data.add(row);
+
+        return new DefaultTableModel(data, columnNames);
     }
 
 

@@ -1,6 +1,7 @@
 package UI;
 
 import dbConnection.ConnectionData;
+import dbConnection.ConnectionException;
 import dbConnection.ConnectionManager;
 
 import javax.swing.*;
@@ -50,12 +51,22 @@ public class MainToolBar extends JToolBar implements ItemListener {
         this.add(panel3);
         connectionsCombo.addItemListener(this);
         btnConnect.addActionListener((e -> {
-            connectionManager.connect();
-            this.connectionStatus.setText("Conectado");
+            try {
+                connectionManager.connect();
+                this.connectionStatus.setText("Conectado");
+            } catch (ConnectionException ex) {
+                JOptionPane pane = new JOptionPane();
+                JOptionPane.showMessageDialog(this, ex.getMessage() + String.format(" (Error code: %s)", ex.getErrorCode()), "Error al establecer la conexión", JOptionPane.ERROR_MESSAGE);
+            }
         }));
         btnDisconnect.addActionListener((e -> {
-            connectionManager.disconnect();
-            connectionStatus.setText("Desconectado");
+            try {
+                connectionManager.disconnect();
+                connectionStatus.setText("Desconectado");
+            } catch (ConnectionException ex) {
+                JOptionPane pane = new JOptionPane();
+                JOptionPane.showMessageDialog(this, ex.getMessage() + String.format(" (Error code: %s)", ex.getErrorCode()), "Error al establecer la conexión", JOptionPane.ERROR_MESSAGE);
+            }
         }));
         connectionManager.setSelectedConnection((ConnectionData) this.connectionsCombo.getSelectedItem());
     }

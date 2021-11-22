@@ -39,24 +39,24 @@ public class ConnectionData implements Serializable {
     /**
      * Se debería mover el connection manager
      */
-    public void Connect(){
+    public void Connect() throws SQLException {
         connection = null;
         try {
             connection = DriverManager.getConnection(this.getUrl(), this.userName,this.password);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw e;
         }
     }
     public Connection getConnection() {
         return this.connection;
     }
 
-    public void disconnect() {
+    public void disconnect() throws SQLException {
         if(this.connection != null){
             try {
                 this.connection.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                throw e;
             }
         }
         this.connection = null;

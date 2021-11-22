@@ -4,6 +4,7 @@ import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,9 +35,6 @@ public class ConnectionManager {
         return instance;
     }
 
-    /*public boolean IsConnected(){
-        return selectedConnection.isConnected();
-    }*/
 
     public void saveConnections(ArrayList<ConnectionData> connectionDataVector) {
         ObjectOutputStream out = null;
@@ -138,14 +136,23 @@ public class ConnectionManager {
         this.selectedConnection = selectedItem;
     }
 
-    public void connect() {
-        this.selectedConnection.Connect();
-        this.fireActionPerformed(connectionEstablished, new ActionEvent(connectionDataVector,ActionEvent.ACTION_PERFORMED,"connectionEstablished"));
+    public void connect() throws ConnectionException {
+        try {
+            this.selectedConnection.Connect();
+            this.fireActionPerformed(connectionEstablished, new ActionEvent(connectionDataVector,ActionEvent.ACTION_PERFORMED,"connectionEstablished"));
+        } catch (SQLException e) {
+            throw new ConnectionException(e.getMessage(),e.getErrorCode(),e);
+        }
     }
 
-    public void disconnect(){
-        this.selectedConnection.disconnect();
-        this.fireActionPerformed(connectionDisconnected, new ActionEvent(connectionDataVector,ActionEvent.ACTION_PERFORMED,"connectionDisconnected"));
+    public void disconnect() throws ConnectionException {
+        try {
+            this.selectedConnection.disconnect();
+            this.fireActionPerformed(connectionDisconnected, new ActionEvent(connectionDataVector,ActionEvent.ACTION_PERFORMED,"connectionDisconnected"));
+        } catch (SQLException e) {
+            throw new ConnectionException(e.getMessage(),e.getErrorCode(),e);
+        }
+
     }
 
     public ConnectionData getSelectedConnection() {
