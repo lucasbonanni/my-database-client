@@ -34,9 +34,6 @@ public class ConnectionData implements Serializable {
     //endregion
 
 
-    public String getetUrl(){
-        return String.format("jdbc:%s://%s:%s/%s","mysql",host,port,databaseName);
-    }
 
 
     /**
@@ -45,18 +42,46 @@ public class ConnectionData implements Serializable {
     public void Connect(){
         connection = null;
         try {
-            connection = DriverManager.getConnection(this.getetUrl(), this.userName,this.password);
+            connection = DriverManager.getConnection(this.getUrl(), this.userName,this.password);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+    public Connection getConnection() {
+        return this.connection;
+    }
 
+    public void disconnect() {
+        if(this.connection != null){
+            try {
+                this.connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        this.connection = null;
+    }
 
 
     @Override
     public String toString() {
         return String.format("%s:%s/%s",host,port,databaseName);
     }
+
+    public String getUrl(){
+        return String.format("jdbc:%s://%s:%s/%s","mysql",host,port,databaseName);
+    }
+
+    public boolean isConnected(){
+        boolean status = false;
+        try {
+            status = this.connection != null && !this.connection.isClosed();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return status;
+    }
+
 
     //region Getters
 
@@ -110,20 +135,7 @@ public class ConnectionData implements Serializable {
         this.password = password;
     }
 
-    public Connection getConnection() {
-        return this.connection;
-    }
 
-    public void disconnect() {
-        if(this.connection != null){
-            try {
-                this.connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        this.connection = null;
-    }
     //endregion
 
 

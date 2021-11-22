@@ -1,22 +1,40 @@
 package UI;
 
 import dbConnection.ConnectionManager;
+import dbConnection.GenericService;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class TreeViewPane extends JScrollPane {
 
     private final ConnectionManager connectionManager;
-
+    private final GenericService genericService;
+    private JTree tree;
+    private DefaultMutableTreeNode rootNode;
     public TreeViewPane() {
+
         connectionManager = ConnectionManager.getInstance();
+        genericService = new GenericService();
+        rootNode = new DefaultMutableTreeNode("*");
+        tree = new JTree(rootNode);
     }
 
     public void build(){
 
-        JTree view = new JTree();
 
+
+        this.connectionManager.addConnectionsEstablishedListener((e -> {
+            String catalog = this.connectionManager.getSelectedConnection().getDatabaseName();
+            rootNode.setUserObject(catalog);
+            ArrayList<String> schemas = this.genericService.getDatabaseObjects(catalog);
+            getObjectsTree(rootNode,schemas);
+            DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+            model.reload(rootNode);
+        }));
 
         setLayout(new ScrollPaneLayout.UIResource());
         setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -25,14 +43,31 @@ public class TreeViewPane extends JScrollPane {
         this.setPreferredSize(new Dimension(200,500));
         setVerticalScrollBar(createVerticalScrollBar());
         setHorizontalScrollBar(createHorizontalScrollBar());
-        if (view != null) {
-            setViewportView(view);
+        if (tree != null) {
+            setViewportView(tree);
         }
         //setUIProperty("opaque",true);
         updateUI();
 
         if (!this.getComponentOrientation().isLeftToRight()) {
             viewport.setViewPosition(new Point(Integer.MAX_VALUE, 0));
+        }
+    }
+
+    private void getObjectsTree(DefaultMutableTreeNode root, ArrayList<String> schemas) {
+        DefaultMutableTreeNode tables =new DefaultMutableTreeNode("Tables");
+        DefaultMutableTreeNode views =new DefaultMutableTreeNode("Views");
+        root.add(tables);
+        root.add(views);
+
+        for (String result: schemas) {
+            String[] nameParts = result.split("\\.");
+            if("TABLE".equals(nameParts[0].toUpperCase())){
+                tables.add(new DefaultMutableTreeNode(nameParts[1]));
+            }
+            if("VIEW".equals(nameParts[0].toUpperCase())) {
+                views.add(new DefaultMutableTreeNode(nameParts[1]));
+            }
         }
     }
 }

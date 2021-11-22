@@ -4,11 +4,12 @@ import javax.swing.event.EventListenerList;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class GenericService {
 
     private final ConnectionManager connectionManager;
-    private final GenericDao genericDao;
+    private GenericDao genericDao;
     private EventListenerList listenerList = new EventListenerList();
 
     public GenericService() {
@@ -41,4 +42,7 @@ public class GenericService {
         }
     }
 
+    public ArrayList<String> getDatabaseObjects(String catalog){
+        return this.genericDao.getDatabaseObjects(catalog, this.connectionManager.getConnection());
+    }
 }

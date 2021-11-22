@@ -1,6 +1,5 @@
 package dbConnection;
 
-import javax.swing.event.EventListenerList;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import java.util.ArrayList;
@@ -42,18 +41,21 @@ public class GenericDao
         return results;
     }
 
-    public List<String> getSchemas(Connection conn){
-        DatabaseMetaData cdmd = null;
-        List<String> results = new ArrayList<String>();
+    public ArrayList<String> getDatabaseObjects(String catalog, Connection conn){
+        ArrayList<String> results = new ArrayList<String>();
         try {
-            ResultSet tables = cdmd.getSchemas();
+            DatabaseMetaData cdmd = conn.getMetaData();
+
+            //"INDEX" "ATTR_TYPE_NAME" "ATTR_TYPE_NAME","TYPE_NAME","ATTR_NAME"
+            //ResultSet tables = cdmd.getTables(null,null,"%",new String[]{ "TABLE", "VIEW" });
+            ResultSet tables = cdmd.getTables("world",null,"%",new String[]{ "TABLE", "VIEW" });
             while (tables.next()) {
-                results.add(tables.getString("TABLE_SCHEM") + "." + tables.getString("TABLE_CATALOG"));
+                results.add(tables.getString("TABLE_TYPE") + "." + tables.getString("TABLE_NAME"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return results;
+            return results;
     }
 
 

@@ -18,6 +18,8 @@ public class ConnectionManager {
 
     private EventListenerList connectionsChanged = new EventListenerList();
 
+    private EventListenerList connectionEstablished = new EventListenerList();
+
     private ConnectionManager() {
         connectionDataVector = new ArrayList<>();
         connectionDataVector.add(new ConnectionData("com.mysql.jdbc.Driver", "127.0.0.1", 3306,"world", "root",""));
@@ -123,15 +125,24 @@ public class ConnectionManager {
         this.connectionsChanged.add(ActionListener.class,actionListener);
     }
 
+    public void addConnectionsEstablishedListener(ActionListener actionListener) {
+        this.connectionEstablished.add(ActionListener.class,actionListener);
+    }
+
     public void setSelectedConnection(ConnectionData selectedItem) {
         this.selectedConnection = selectedItem;
     }
 
     public void connect() {
         this.selectedConnection.Connect();
+        this.fireActionPerformed(connectionEstablished, new ActionEvent(connectionDataVector,ActionEvent.ACTION_PERFORMED,"connectionEstablished"));
     }
 
     public void disconnect(){
         this.selectedConnection.disconnect();
+    }
+
+    public ConnectionData getSelectedConnection() {
+       return this.selectedConnection;
     }
 }
