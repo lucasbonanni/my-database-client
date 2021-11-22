@@ -24,8 +24,10 @@ public class ConnectionManager {
 
     private ConnectionManager() {
         connectionDataVector = new ArrayList<>();
+/*
         connectionDataVector.add(new ConnectionData("com.mysql.jdbc.Driver", "127.0.0.1", 3306,"world", "root",""));
         connectionDataVector.add(new ConnectionData("org.postgresql.Driver", "127.0.0.1", 3000,"Sakila", "admin","password"));
+        */
     }
 
     public static ConnectionManager getInstance(){
@@ -62,15 +64,14 @@ public class ConnectionManager {
     }
 
 
-    public List<ConnectionData> loadConnectionsData() {
-        List<ConnectionData> resultado = new ArrayList<ConnectionData>();
+    public void loadConnectionsData() {
         ObjectInputStream in = null;
         try {
-            in = new ObjectInputStream(new BufferedInputStream(
-                    new FileInputStream(connectionsFileName)));
+            in = new ObjectInputStream(new FileInputStream(connectionsFileName));
 
             while (true) {
-                resultado.add((ConnectionData)in.readObject());
+                ConnectionData data = (ConnectionData)in.readObject();
+                connectionDataVector.add(data);
             }
         } catch (EOFException e) {
         } catch (IOException e) {
@@ -87,7 +88,6 @@ public class ConnectionManager {
                 e.printStackTrace();
             }
         }
-        return resultado;
     }
 
     public java.sql.Connection getConnection() throws ConnectionException {

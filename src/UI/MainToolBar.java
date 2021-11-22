@@ -38,6 +38,7 @@ public class MainToolBar extends JToolBar implements ItemListener {
     }
 
     public void build(){
+        connectionManager.loadConnectionsData();
         setComboData();
         connectionManager.addConnectionsChangedListener((e->setComboData()));
         JPanel panel1 = new JPanel();

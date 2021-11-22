@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionData implements Serializable {
+    private static final long serialVersionUID = 4936929128525393354L;
     //region Atributos
     private String driverName;
     private String host;
@@ -13,7 +14,6 @@ public class ConnectionData implements Serializable {
     private String databaseName;
     private String userName;
     private String password;
-
 
     Connection connection;
 
