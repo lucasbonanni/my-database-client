@@ -1,5 +1,6 @@
 package UI;
 
+import dbConnection.ConnectionException;
 import dbConnection.ConnectionManager;
 import dbConnection.GenericService;
 import dbConnection.ServiceException;
@@ -39,6 +40,9 @@ public class TreeViewPane extends JScrollPane {
             }
             catch (ServiceException ex){
                 JOptionPane.showMessageDialog(this, ex.getMessage() + String.format(" (Error code: %s)", ex.getErrorCode()), "Error al establecer la conexión", JOptionPane.ERROR_MESSAGE);
+            }
+            catch (ConnectionException ex){
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error al establecer la conexión", JOptionPane.ERROR_MESSAGE);
             }
         }));
 

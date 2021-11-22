@@ -1,6 +1,7 @@
 package UI;
 
 import dbConnection.ConnectionData;
+import dbConnection.ConnectionException;
 import dbConnection.DaoException;
 import dbConnection.ConnectionManager;
 
@@ -25,8 +26,10 @@ public class MainToolBar extends JToolBar implements ItemListener {
 
     public MainToolBar(){
         super();
-        btnExecute = new JButton("Ejecutar");
-        btnClearText = new JButton("Borrar Texto");
+        ImageIcon executeIcon = new ImageIcon("images/Play-icon.png");
+        ImageIcon eraseIcon = new ImageIcon("images/eraser-icon.png");
+        btnExecute = new JButton(executeIcon);
+        btnClearText = new JButton(eraseIcon);
         btnDisconnect = new JButton("Desconectar");
         btnConnect = new JButton("Conectar");
         connectionsCombo = new JComboBox<>();
@@ -54,16 +57,18 @@ public class MainToolBar extends JToolBar implements ItemListener {
             try {
                 connectionManager.connect();
                 this.connectionStatus.setText("Conectado");
-            } catch (DaoException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage() + String.format(" (Error code: %s)", ex.getErrorCode()), "Error al establecer la conexión", JOptionPane.ERROR_MESSAGE);
+            }
+            catch (ConnectionException ex){
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error al establecer la conexión", JOptionPane.ERROR_MESSAGE);
             }
         }));
         btnDisconnect.addActionListener((e -> {
             try {
                 connectionManager.disconnect();
                 connectionStatus.setText("Desconectado");
-            } catch (DaoException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage() + String.format(" (Error code: %s)", ex.getErrorCode()), "Error al establecer la conexión", JOptionPane.ERROR_MESSAGE);
+            }
+            catch (ConnectionException ex){
+                JOptionPane.showMessageDialog(this, "Ocurrió un problema al desconectar", "Error al desconectar", JOptionPane.ERROR_MESSAGE);
             }
         }));
         connectionManager.setSelectedConnection((ConnectionData) this.connectionsCombo.getSelectedItem());

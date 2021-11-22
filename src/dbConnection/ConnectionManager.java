@@ -90,8 +90,7 @@ public class ConnectionManager {
         return resultado;
     }
 
-    public java.sql.Connection getConnection()
-    {
+    public java.sql.Connection getConnection() throws ConnectionException {
         return selectedConnection.getConnection();
     }
 
@@ -136,21 +135,21 @@ public class ConnectionManager {
         this.selectedConnection = selectedItem;
     }
 
-    public void connect() throws DaoException {
+    public void connect() throws ConnectionException {
         try {
             this.selectedConnection.Connect();
             this.fireActionPerformed(connectionEstablished, new ActionEvent(connectionDataVector,ActionEvent.ACTION_PERFORMED,"connectionEstablished"));
         } catch (SQLException e) {
-            throw new DaoException(e.getMessage(),e.getErrorCode(),e);
+            throw new ConnectionException(e.getMessage(),e.getErrorCode(),e);
         }
     }
 
-    public void disconnect() throws DaoException {
+    public void disconnect() throws ConnectionException {
         try {
             this.selectedConnection.disconnect();
             this.fireActionPerformed(connectionDisconnected, new ActionEvent(connectionDataVector,ActionEvent.ACTION_PERFORMED,"connectionDisconnected"));
         } catch (SQLException e) {
-            throw new DaoException(e.getMessage(),e.getErrorCode(),e);
+            throw new ConnectionException(e.getMessage(),e.getErrorCode(),e);
         }
 
     }

@@ -22,7 +22,7 @@ public class GenericService {
         this.listenerList.add(ActionListener.class,actionListener);
     }
 
-    public void executeStatement(String query){
+    public void executeStatement(String query) throws ConnectionException {
         DefaultTableModel tableModel = null;
         try {
             tableModel = this.genericDao.executeStatement(connectionManager.getConnection(), query);
@@ -33,6 +33,9 @@ public class GenericService {
             como lo se muestran en los clientes sql
             */
             tableModel = buildErrorTable(e);
+        }
+        catch (ConnectionException ex){
+            throw ex;
         }
         fireActionPerformed(tableModel);
     }
@@ -52,12 +55,15 @@ public class GenericService {
 
 
 
-    public ArrayList<String> getDatabaseObjects(String catalog) throws ServiceException {
+    public ArrayList<String> getDatabaseObjects(String catalog) throws ServiceException, ConnectionException {
         ArrayList<String> results = new ArrayList<>();
         try {
             results =  this.genericDao.getDatabaseObjects(catalog, this.connectionManager.getConnection());
         } catch (DaoException e) {
             throw new ServiceException(e.getMessage(),e.getErrorCode(),e.getCause());
+        }
+        catch (ConnectionException ex){
+            throw ex;
         }
         return results;
     }

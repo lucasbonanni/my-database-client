@@ -47,7 +47,10 @@ public class ConnectionData implements Serializable {
             throw e;
         }
     }
-    public Connection getConnection() {
+    public Connection getConnection() throws ConnectionException {
+        if(this.connection == null){
+            throw new ConnectionException("No se estableción una conexión",0,null);
+        }
         return this.connection;
     }
 

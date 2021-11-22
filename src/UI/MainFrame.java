@@ -1,6 +1,7 @@
 package UI;
 
 import dbConnection.ConnectionData;
+import dbConnection.ConnectionException;
 import dbConnection.GenericService;
 
 import javax.swing.*;
@@ -44,7 +45,11 @@ public class MainFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String text = queryEditorPane.getText();
-                genericService.executeStatement(text);
+                try {
+                    genericService.executeStatement(text);
+                } catch (ConnectionException ex){
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Error al ejecutar sentencia", JOptionPane.ERROR_MESSAGE);
+                }
             }
 
             @Override
