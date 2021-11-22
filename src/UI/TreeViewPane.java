@@ -2,6 +2,7 @@ package UI;
 
 import dbConnection.ConnectionManager;
 import dbConnection.GenericService;
+import dbConnection.ServiceException;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -28,12 +29,17 @@ public class TreeViewPane extends JScrollPane {
 
 
         this.connectionManager.addConnectionEstablishedListener((e -> {
-            String catalog = this.connectionManager.getSelectedConnection().getDatabaseName();
-            rootNode.setUserObject(catalog);
-            ArrayList<String> schemas = this.genericService.getDatabaseObjects(catalog);
-            getObjectsTree(rootNode,schemas);
-            DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-            model.reload(rootNode);
+            try {
+                String catalog = this.connectionManager.getSelectedConnection().getDatabaseName();
+                rootNode.setUserObject(catalog);
+                ArrayList<String> schemas = this.genericService.getDatabaseObjects(catalog);
+                getObjectsTree(rootNode,schemas);
+                DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+                model.reload(rootNode);
+            }
+            catch (ServiceException ex){
+                JOptionPane.showMessageDialog(this, ex.getMessage() + String.format(" (Error code: %s)", ex.getErrorCode()), "Error al establecer la conexión", JOptionPane.ERROR_MESSAGE);
+            }
         }));
 
         this.connectionManager.addConnectionDisconnectedListener((e -> {

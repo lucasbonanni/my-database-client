@@ -1,7 +1,7 @@
 package UI;
 
 import dbConnection.ConnectionData;
-import dbConnection.ConnectionException;
+import dbConnection.DaoException;
 import dbConnection.ConnectionManager;
 
 import javax.swing.*;
@@ -54,8 +54,7 @@ public class MainToolBar extends JToolBar implements ItemListener {
             try {
                 connectionManager.connect();
                 this.connectionStatus.setText("Conectado");
-            } catch (ConnectionException ex) {
-                JOptionPane pane = new JOptionPane();
+            } catch (DaoException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage() + String.format(" (Error code: %s)", ex.getErrorCode()), "Error al establecer la conexión", JOptionPane.ERROR_MESSAGE);
             }
         }));
@@ -63,8 +62,7 @@ public class MainToolBar extends JToolBar implements ItemListener {
             try {
                 connectionManager.disconnect();
                 connectionStatus.setText("Desconectado");
-            } catch (ConnectionException ex) {
-                JOptionPane pane = new JOptionPane();
+            } catch (DaoException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage() + String.format(" (Error code: %s)", ex.getErrorCode()), "Error al establecer la conexión", JOptionPane.ERROR_MESSAGE);
             }
         }));

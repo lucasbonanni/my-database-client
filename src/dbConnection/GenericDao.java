@@ -7,7 +7,7 @@ import java.util.Vector;
 
 public class GenericDao
 {
-    public DefaultTableModel executeStatement(Connection conn, String query){
+    public DefaultTableModel executeStatement(Connection conn, String query) throws DaoException {
         DefaultTableModel tableModel = null;
         try {
             Statement st = conn.createStatement();
@@ -22,28 +22,15 @@ public class GenericDao
 
 
         } catch (SQLException e) {
-            tableModel = buildErrorTable(e);
+            throw new DaoException(e.getMessage(),e.getErrorCode(),e.getCause());
         }
         return tableModel;
     }
 
-    private DefaultTableModel buildErrorTable(SQLException e) {
-        Vector<String> columnNames = new Vector<String>();
-        Vector<Vector<Object>> data = new Vector<>();
-        columnNames.add("Mensaje");
-        columnNames.add("Estado");
-        columnNames.add("Codigo de error");
-        Vector<Object> row = new Vector<>();
-        row.add(e.getMessage());
-        row.add(e.getSQLState());
-        row.add(e.getErrorCode());
-        data.add(row);
-
-        return new DefaultTableModel(data, columnNames);
-    }
 
 
-    public ArrayList<String> getDatabaseObjects(String catalog, Connection conn){
+
+    public ArrayList<String> getDatabaseObjects(String catalog, Connection conn) throws DaoException {
         ArrayList<String> results = new ArrayList<String>();
         try {
             DatabaseMetaData cdmd = conn.getMetaData();
@@ -55,7 +42,7 @@ public class GenericDao
                 results.add(tables.getString("TABLE_TYPE") + "." + tables.getString("TABLE_NAME"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException(e.getMessage(),e.getErrorCode(),e.getCause());
         }
             return results;
     }
@@ -63,36 +50,37 @@ public class GenericDao
 
 
 
-    private static DefaultTableModel buildTableModel(ResultSet rs)
-            throws SQLException {
+    private static DefaultTableModel buildTableModel(ResultSet rs)  throws DaoException {
         Vector<String> columnNames = new Vector<String>();
         Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-        if (rs != null) {
-            ResultSetMetaData metaData = rs.getMetaData();
-            // Obtengo las columnas
-            int columnCount = metaData.getColumnCount();
-            for (int column = 1; column <= columnCount; column++) {
-                columnNames.add(metaData.getColumnName(column));
-            }
-
-            // Obtengo las filas
-            while (rs.next()) {
-                Vector<Object> vector = new Vector<Object>();
-                for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
-                    vector.add(rs.getObject(columnIndex));
+        try {
+            if (rs != null) {
+                ResultSetMetaData metaData = rs.getMetaData();
+                // Obtengo las columnas
+                int columnCount = metaData.getColumnCount();
+                for (int column = 1; column <= columnCount; column++) {
+                    columnNames.add(metaData.getColumnName(column));
                 }
+
+                // Obtengo las filas
+                while (rs.next()) {
+                    Vector<Object> vector = new Vector<Object>();
+                    for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+                        vector.add(rs.getObject(columnIndex));
+                    }
+                    data.add(vector);
+                }
+            } else {
+                columnNames.add("Resultado");
+                Vector<Object> vector = new Vector<Object>();
+                vector.add("Se ejecutó correctamente");
                 data.add(vector);
             }
         }
-        else {
-            columnNames.add("Resultado");
-            Vector<Object> vector = new Vector<Object>();
-            vector.add("Se ejecutó correctamente");
-            data.add(vector);
+        catch (SQLException e ){
+            throw new DaoException(e.getMessage(),e.getErrorCode(),e.getCause());
         }
 
-
         return new DefaultTableModel(data, columnNames);
-
     }
 }

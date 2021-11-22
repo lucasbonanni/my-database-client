@@ -1,10 +1,10 @@
 package dbConnection;
 
-public class ConnectionException extends Exception {
+public class DaoException extends Exception {
 
     private String errorCode;
 
-    public ConnectionException(String message, int errorCode, Throwable cause) {
+    public DaoException(String message, int errorCode, Throwable cause) {
         super(message, cause);
         this.errorCode = String.valueOf(errorCode);
     }

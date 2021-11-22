@@ -5,6 +5,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class GenericService {
 
@@ -22,8 +23,43 @@ public class GenericService {
     }
 
     public void executeStatement(String query){
-        DefaultTableModel tableModel = this.genericDao.executeStatement(connectionManager.getConnection(), query);
+        DefaultTableModel tableModel = null;
+        try {
+            tableModel = this.genericDao.executeStatement(connectionManager.getConnection(), query);
+
+        } catch (DaoException e) {
+            /*
+            Capturo la excepción del dao y en este caso muestro el error en la parte inferior de la pantalla
+            como lo se muestran en los clientes sql
+            */
+            tableModel = buildErrorTable(e);
+        }
         fireActionPerformed(tableModel);
+    }
+
+    private DefaultTableModel buildErrorTable(DaoException e) {
+        Vector<String> columnNames = new Vector<String>();
+        Vector<Vector<Object>> data = new Vector<>();
+        columnNames.add("Mensaje");
+        columnNames.add("Codigo de error");
+        Vector<Object> row = new Vector<>();
+        row.add(e.getMessage());
+        row.add(e.getErrorCode());
+        data.add(row);
+
+        return new DefaultTableModel(data, columnNames);
+    }
+
+
+
+    public ArrayList<String> getDatabaseObjects(String catalog) throws ServiceException {
+        ArrayList<String> results = new ArrayList<>();
+        try {
+            results =  this.genericDao.getDatabaseObjects(catalog, this.connectionManager.getConnection());
+        } catch (DaoException e) {
+            throw new ServiceException(e.getMessage(),e.getErrorCode(),e.getCause());
+        }
+        return results;
     }
 
     protected void fireActionPerformed(DefaultTableModel tableModel) {
@@ -40,9 +76,5 @@ public class GenericService {
                 ((ActionListener)listeners[i+1]).actionPerformed(e);
             }
         }
-    }
-
-    public ArrayList<String> getDatabaseObjects(String catalog){
-        return this.genericDao.getDatabaseObjects(catalog, this.connectionManager.getConnection());
     }
 }

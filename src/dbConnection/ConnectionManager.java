@@ -136,21 +136,21 @@ public class ConnectionManager {
         this.selectedConnection = selectedItem;
     }
 
-    public void connect() throws ConnectionException {
+    public void connect() throws DaoException {
         try {
             this.selectedConnection.Connect();
             this.fireActionPerformed(connectionEstablished, new ActionEvent(connectionDataVector,ActionEvent.ACTION_PERFORMED,"connectionEstablished"));
         } catch (SQLException e) {
-            throw new ConnectionException(e.getMessage(),e.getErrorCode(),e);
+            throw new DaoException(e.getMessage(),e.getErrorCode(),e);
         }
     }
 
-    public void disconnect() throws ConnectionException {
+    public void disconnect() throws DaoException {
         try {
             this.selectedConnection.disconnect();
             this.fireActionPerformed(connectionDisconnected, new ActionEvent(connectionDataVector,ActionEvent.ACTION_PERFORMED,"connectionDisconnected"));
         } catch (SQLException e) {
-            throw new ConnectionException(e.getMessage(),e.getErrorCode(),e);
+            throw new DaoException(e.getMessage(),e.getErrorCode(),e);
         }
 
     }
