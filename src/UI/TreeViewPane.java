@@ -27,11 +27,18 @@ public class TreeViewPane extends JScrollPane {
 
 
 
-        this.connectionManager.addConnectionsEstablishedListener((e -> {
+        this.connectionManager.addConnectionEstablishedListener((e -> {
             String catalog = this.connectionManager.getSelectedConnection().getDatabaseName();
             rootNode.setUserObject(catalog);
             ArrayList<String> schemas = this.genericService.getDatabaseObjects(catalog);
             getObjectsTree(rootNode,schemas);
+            DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+            model.reload(rootNode);
+        }));
+
+        this.connectionManager.addConnectionDisconnectedListener((e -> {
+            rootNode.removeAllChildren();
+            rootNode.setUserObject("*");
             DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
             model.reload(rootNode);
         }));
@@ -64,6 +71,7 @@ public class TreeViewPane extends JScrollPane {
             String[] nameParts = result.split("\\.");
             if("TABLE".equals(nameParts[0].toUpperCase())){
                 tables.add(new DefaultMutableTreeNode(nameParts[1]));
+
             }
             if("VIEW".equals(nameParts[0].toUpperCase())) {
                 views.add(new DefaultMutableTreeNode(nameParts[1]));

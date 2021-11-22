@@ -19,6 +19,7 @@ public class ConnectionManager {
     private EventListenerList connectionsChanged = new EventListenerList();
 
     private EventListenerList connectionEstablished = new EventListenerList();
+    private EventListenerList connectionDisconnected = new EventListenerList();
 
     private ConnectionManager() {
         connectionDataVector = new ArrayList<>();
@@ -125,8 +126,12 @@ public class ConnectionManager {
         this.connectionsChanged.add(ActionListener.class,actionListener);
     }
 
-    public void addConnectionsEstablishedListener(ActionListener actionListener) {
+    public void addConnectionEstablishedListener(ActionListener actionListener) {
         this.connectionEstablished.add(ActionListener.class,actionListener);
+    }
+
+    public void addConnectionDisconnectedListener(ActionListener actionListener) {
+        this.connectionDisconnected.add(ActionListener.class,actionListener);
     }
 
     public void setSelectedConnection(ConnectionData selectedItem) {
@@ -140,6 +145,7 @@ public class ConnectionManager {
 
     public void disconnect(){
         this.selectedConnection.disconnect();
+        this.fireActionPerformed(connectionDisconnected, new ActionEvent(connectionDataVector,ActionEvent.ACTION_PERFORMED,"connectionDisconnected"));
     }
 
     public ConnectionData getSelectedConnection() {

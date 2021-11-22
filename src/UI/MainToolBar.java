@@ -17,6 +17,7 @@ public class MainToolBar extends JToolBar implements ItemListener {
     JButton btnConnect;
     JButton btnDisconnect;
     JComboBox<ConnectionData> connectionsCombo;
+    JLabel connectionStatus;
     public JButton getBtnExecute() {
         return btnExecute;
     }
@@ -29,15 +30,18 @@ public class MainToolBar extends JToolBar implements ItemListener {
         btnConnect = new JButton("Conectar");
         connectionsCombo = new JComboBox<>();
         connectionManager = ConnectionManager.getInstance();
+        connectionStatus = new JLabel("Disconnected");
     }
 
     public void build(){
         setComboData();
         connectionManager.addConnectionsChangedListener((e->setComboData()));
+        connectionStatus.setText("Disconnected");
         JPanel panel1 = new JPanel();
         panel1.add(connectionsCombo);
         panel1.add(btnConnect);
         panel1.add(btnDisconnect);
+        panel1.add(connectionStatus);
         this.add(panel1);
         JPanel panel2 = new JPanel();
         panel2.add(btnExecute);
@@ -46,8 +50,14 @@ public class MainToolBar extends JToolBar implements ItemListener {
         panel3.add(btnClearText);
         this.add(panel3);
         connectionsCombo.addItemListener(this);
-        btnConnect.addActionListener((e -> connectionManager.connect()));
-        btnDisconnect.addActionListener((e -> connectionManager.disconnect()));
+        btnConnect.addActionListener((e -> {
+            connectionManager.connect();
+            this.connectionStatus.setText("Connected");
+        }));
+        btnDisconnect.addActionListener((e -> {
+            connectionManager.disconnect();
+            connectionStatus.setText("Disconnected");
+        }));
         connectionManager.setSelectedConnection((ConnectionData) this.connectionsCombo.getSelectedItem());
     }
 
