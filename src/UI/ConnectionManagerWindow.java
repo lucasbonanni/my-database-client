@@ -41,10 +41,8 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
     JButton btnCancel;
 
 
-    private boolean isEditing;
-    private boolean isNew;
     private ConnectionData selectedItem;
-
+    private JComboBox<String> driverClassCombo;
 
     public ConnectionManagerWindow(Frame owner) {
         super(owner, "Manager de conexiones",true);
@@ -55,6 +53,8 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
         connectionManager = ConnectionManager.getInstance();
 
         connectionsCombo = new JComboBox<>();
+        driverClassCombo = new JComboBox<>();
+        setDriverClassComboData();
         this.setBounds(20,20,500,300);
     }
 
@@ -88,7 +88,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
 
     public void build(){
         JPanel connectionsPanel = InitializeData();
-        connectionManager.addConnectionsChangedListener((e) -> setComboData());
+        connectionManager.addConnectionsChangedListener((e) -> setConnectionsComboData());
 
         btnNew.addActionListener((e -> {
             this.selectedItem = new ConnectionData();
@@ -102,6 +102,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
         btnSave.addActionListener((e -> {
             this.selectedItem.setDatabaseName(this.databaseNameField.getText());
             this.selectedItem.setDriverName(this.driverNameField.getText());
+            this.selectedItem.setDriverName((String)this.driverClassCombo.getSelectedItem());
             this.selectedItem.setHost(this.hostField.getText());
             String pass = String.valueOf(this.passwordField.getPassword());
             this.selectedItem.setPassword(pass);
@@ -137,7 +138,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 1;
         constraints.gridy = 0;
-        formPanel.add(driverNameField,constraints);
+        formPanel.add(driverClassCombo,constraints);
         // Cambiar desde acá
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.ipady = pad;
@@ -197,7 +198,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
     }
 
     private JPanel InitializeData() {
-        setComboData();
+        setConnectionsComboData();
         connectionsCombo.addItemListener(this);
         this.selectedItem = (ConnectionData) connectionsCombo.getSelectedItem();
         this.fillForm();
@@ -234,11 +235,18 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
         this.userField.setText("" + this.selectedItem.getUser());
         this.passwordField.setText("" + this.selectedItem.getPassword());
         this.driverNameField.setText("" + this.selectedItem.getDriverName());
+        this.driverClassCombo.setSelectedItem(this.selectedItem.getDriverName());
     }
 
-    private void setComboData(){
+    private void setConnectionsComboData(){
         DefaultComboBoxModel connections = new DefaultComboBoxModel<>(((ArrayList<ConnectionData>)connectionManager.getConnections().clone()).toArray()) ;
         connectionsCombo.setModel(connections);
+    }
+
+    private void setDriverClassComboData(){
+        this.driverClassCombo.addItem("com.mysql.jdbc.Driver");
+        this.driverClassCombo.addItem("org.h2.Driver");
+        this.driverClassCombo.addItem("Personalizado (Proximamente)");
     }
 
     private ArrayList<ConnectionData> getComboItems(){
