@@ -1,8 +1,7 @@
 package UI;
 
 import dbConnection.ConnectionData;
-import dbConnection.ConnectionException;
-import dbConnection.DaoException;
+import exceptions.ConnectionException;
 import dbConnection.ConnectionManager;
 
 import javax.swing.*;

@@ -1,7 +1,7 @@
 package UI;
 
 import dbConnection.ConnectionData;
-import dbConnection.ConnectionException;
+import exceptions.ConnectionException;
 import dbConnection.GenericService;
 
 import javax.swing.*;

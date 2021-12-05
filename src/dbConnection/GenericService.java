@@ -1,5 +1,9 @@
 package dbConnection;
 
+import exceptions.ConnectionException;
+import exceptions.DaoException;
+import exceptions.ServiceException;
+
 import javax.swing.event.EventListenerList;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;

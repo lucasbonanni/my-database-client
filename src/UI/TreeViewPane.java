@@ -1,9 +1,9 @@
 package UI;
 
-import dbConnection.ConnectionException;
+import exceptions.ConnectionException;
 import dbConnection.ConnectionManager;
 import dbConnection.GenericService;
-import dbConnection.ServiceException;
+import exceptions.ServiceException;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;

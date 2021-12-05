@@ -1,12 +1,13 @@
 package dbConnection;
 
+import exceptions.ConnectionException;
+
 import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ConnectionManager {
     private static final String connectionsFileName = "connections.dat";

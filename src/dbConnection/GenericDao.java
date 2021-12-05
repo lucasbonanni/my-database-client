@@ -1,5 +1,7 @@
 package dbConnection;
 
+import exceptions.DaoException;
+
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import java.util.ArrayList;
