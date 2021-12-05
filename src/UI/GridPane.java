@@ -1,6 +1,6 @@
 package UI;
 
-import dbConnection.ExecuteStatementEvent;
+import connection.ExecuteStatementEvent;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

@@ -1,4 +1,4 @@
-package dbConnection;
+package connection;
 
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;

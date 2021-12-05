@@ -1,4 +1,4 @@
-package dbConnection;
+package connection;
 
 import java.util.UUID;
 

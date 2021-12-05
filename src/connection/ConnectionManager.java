@@ -1,4 +1,4 @@
-package dbConnection;
+package connection;
 
 import exceptions.ConnectionException;
 

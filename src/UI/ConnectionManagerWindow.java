@@ -1,7 +1,7 @@
 package UI;
 
-import dbConnection.ConnectionData;
-import dbConnection.ConnectionManager;
+import connection.ConnectionData;
+import connection.ConnectionManager;
 
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;

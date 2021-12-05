@@ -1,8 +1,8 @@
 package UI;
 
-import dbConnection.ConnectionData;
+import connection.ConnectionData;
 import exceptions.ConnectionException;
-import dbConnection.GenericService;
+import service.GenericService;
 
 import javax.swing.*;
 import javax.swing.event.EventListenerList;

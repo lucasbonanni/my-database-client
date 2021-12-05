@@ -1,4 +1,4 @@
-package dbConnection;
+package dao;
 
 import exceptions.DaoException;
 
