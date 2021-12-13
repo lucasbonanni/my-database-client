@@ -11,7 +11,12 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
 public class ConnectionManagerWindow extends JDialog implements ItemListener {
-    private final int pad = 5;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6841453153183086209L;
+
+	private final int pad = 5;
 
     ConnectionManager connectionManager;
     JComboBox<ConnectionData> connectionsCombo;

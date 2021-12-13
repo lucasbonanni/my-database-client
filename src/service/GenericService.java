@@ -1,8 +1,9 @@
 package service;
 
-import dao.GenericDao;
+
 import connection.ConnectionManager;
 import connection.ExecuteStatementEvent;
+import dao.GenericDao;
 import exceptions.ConnectionException;
 import exceptions.DaoException;
 import exceptions.ServiceException;

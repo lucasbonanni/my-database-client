@@ -1,5 +1,6 @@
 package connection;
 
+
 import exceptions.ConnectionException;
 
 import javax.swing.event.EventListenerList;
@@ -156,6 +157,6 @@ public class ConnectionManager {
     }
 
     public ConnectionData getSelectedConnection() {
-       return this.selectedConnection;
+        return this.selectedConnection;
     }
 }

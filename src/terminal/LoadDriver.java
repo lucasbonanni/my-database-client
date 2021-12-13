@@ -51,8 +51,6 @@ public class LoadDriver {
             while(tables.next()) {
                 System.out.println(tables.getString("TABLE_TYPE") + " " + tables.getString("TABLE_SCHEM") + " " + tables.getString("TABLE_NAME"));
             }
-
-
             conn.close();
 
             //1. Create the frame.

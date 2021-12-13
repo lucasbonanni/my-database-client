@@ -6,7 +6,11 @@ import java.awt.*;
 
 public class QueryEditorPane extends JScrollPane {
 
-    private final JEditorPane textArea;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -4252492595829105679L;
+	private final JEditorPane textArea;
 
     public QueryEditorPane(){
         this.textArea = new JEditorPane();
