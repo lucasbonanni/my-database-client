@@ -3,6 +3,7 @@ package UI;
 import connection.ConnectionData;
 import exceptions.ConnectionException;
 import service.GenericService;
+import service.IGenericService;
 
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
@@ -11,7 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class MainFrame extends JFrame {
-    private final GenericService genericService;
+    private final IGenericService genericService;
     GridPane gridPane;
     QueryEditorPane queryEditorPane;
     TreeViewPane treeViewPane;
@@ -42,13 +43,7 @@ public class MainFrame extends JFrame {
         this.setBackground(Color.white);
         JButton btnExecute = this.toolBar.getBtnExecute();
         btnExecute.addMouseListener(new ExecuteEventListener(this.queryEditorPane,this.genericService));
-/*        archivo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String text = queryEditorPane.getText();
-                connectionData.executeQuery(text);
-            }
-        });*/
+
         toolBar.addBtnClearTextAction((e -> {
             this.queryEditorPane.clearText();
         }));

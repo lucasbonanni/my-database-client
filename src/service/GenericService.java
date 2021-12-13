@@ -15,7 +15,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Vector;
 
-public class GenericService {
+public class GenericService implements IGenericService {
 
     private final ConnectionManager connectionManager;
     private GenericDao genericDao;
@@ -26,10 +26,12 @@ public class GenericService {
          genericDao = new GenericDao();
     }
 
+    @Override
     public void addListener(ActionListener actionListener) {
         this.listenerList.add(ActionListener.class,actionListener);
     }
 
+    @Override
     public void executeStatement(String query) throws ConnectionException {
         DefaultTableModel tableModel = null;
         try {
@@ -63,6 +65,7 @@ public class GenericService {
 
 
 
+    @Override
     public ArrayList<String> getDatabaseObjects(String catalog) throws ServiceException, ConnectionException {
         ArrayList<String> results = new ArrayList<>();
         try {

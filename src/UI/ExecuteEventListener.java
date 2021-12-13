@@ -1,7 +1,7 @@
 package UI;
 
 import exceptions.ConnectionException;
-import service.GenericService;
+import service.IGenericService;
 
 import javax.swing.*;
 import java.awt.event.MouseEvent;
@@ -10,9 +10,9 @@ import java.awt.event.MouseListener;
 public class ExecuteEventListener implements MouseListener {
 
     private QueryEditorPane queryPane;
-    private GenericService service;
+    private IGenericService service;
 
-    public ExecuteEventListener(QueryEditorPane pane, GenericService service) {
+    public ExecuteEventListener(QueryEditorPane pane, IGenericService service) {
         queryPane = pane;
         this.service = service;
     }

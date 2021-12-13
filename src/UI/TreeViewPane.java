@@ -4,6 +4,7 @@ import exceptions.ConnectionException;
 import connection.ConnectionManager;
 import service.GenericService;
 import exceptions.ServiceException;
+import service.IGenericService;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 public class TreeViewPane extends JScrollPane {
 
     private final ConnectionManager connectionManager;
-    private final GenericService genericService;
+    private final IGenericService genericService;
     private JTree tree;
     private DefaultMutableTreeNode rootNode;
     public TreeViewPane() {
