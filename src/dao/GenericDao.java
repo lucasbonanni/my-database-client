@@ -7,8 +7,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Vector;
 
-public class GenericDao
-{
+public class GenericDao implements IGenericDao {
+    @Override
     public DefaultTableModel executeStatement(Connection conn, String query) throws DaoException {
         DefaultTableModel tableModel = null;
         try {
@@ -32,6 +32,7 @@ public class GenericDao
 
 
 
+    @Override
     public ArrayList<String> getDatabaseObjects(String catalog, Connection conn) throws DaoException {
         ArrayList<String> results = new ArrayList<String>();
         try {

@@ -4,6 +4,7 @@ package service;
 import connection.ConnectionManager;
 import connection.ExecuteStatementEvent;
 import dao.GenericDao;
+import dao.IGenericDao;
 import exceptions.ConnectionException;
 import exceptions.DaoException;
 import exceptions.ServiceException;
@@ -18,7 +19,7 @@ import java.util.Vector;
 public class GenericService implements IGenericService {
 
     private final ConnectionManager connectionManager;
-    private GenericDao genericDao;
+    private IGenericDao genericDao;
     private EventListenerList listenerList = new EventListenerList();
 
     public GenericService() {
