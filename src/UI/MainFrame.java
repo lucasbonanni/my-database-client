@@ -41,37 +41,7 @@ public class MainFrame extends JFrame {
         UIManager.put("MenuBar.background",Color.white);
         this.setBackground(Color.white);
         JButton btnExecute = this.toolBar.getBtnExecute();
-        btnExecute.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                String text = queryEditorPane.getText();
-                try {
-                    genericService.executeStatement(text);
-                } catch (ConnectionException ex){
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Error al ejecutar sentencia", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
+        btnExecute.addMouseListener(new ExecuteEventListener(this.queryEditorPane,this.genericService));
 /*        archivo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
