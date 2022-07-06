@@ -2,6 +2,7 @@ package connection;
 
 
 import exceptions.ConnectionException;
+import exceptions.FileException;
 
 import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
@@ -26,10 +27,10 @@ public class ConnectionManager {
 
     private ConnectionManager() {
         connectionDataVector = new ArrayList<>();
-/*
-        connectionDataVector.add(new ConnectionData("com.mysql.jdbc.Driver", "127.0.0.1", 3306,"world", "root",""));
+
+/*        connectionDataVector.add(new ConnectionData("com.mysql.jdbc.Driver", "127.0.0.1", 3306,"world", "root",""));
         connectionDataVector.add(new ConnectionData("org.postgresql.Driver", "127.0.0.1", 3000,"Sakila", "admin","password"));
-        */
+        this.saveConnections(connectionDataVector);*/
     }
 
     public static ConnectionManager getInstance(){
@@ -42,14 +43,12 @@ public class ConnectionManager {
 
     public void saveConnections(ArrayList<ConnectionData> connectionDataVector) {
         ObjectOutputStream out = null;
-
+        FileOutputStream file = null;
         try {
-            out = new ObjectOutputStream(new BufferedOutputStream(
-                    new FileOutputStream(connectionsFileName,false)));
+            file = new FileOutputStream(connectionsFileName,false);
+            out = new ObjectOutputStream(new BufferedOutputStream(file));
+            out.writeObject(connectionDataVector);
 
-            for (ConnectionData connectionData: connectionDataVector) {
-                out.writeObject(connectionData);
-            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -57,6 +56,7 @@ public class ConnectionManager {
         } finally {
             try {
                 out.close();
+                file.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -66,28 +66,30 @@ public class ConnectionManager {
     }
 
 
-    public void loadConnectionsData() {
+    public void loadConnectionsData() throws FileException {
         ObjectInputStream in = null;
+        FileInputStream file = null;
         try {
-            in = new ObjectInputStream(new FileInputStream(connectionsFileName));
+            file = new FileInputStream(connectionsFileName);
+            in = new ObjectInputStream(file);
 
-            while (true) {
-                ConnectionData data = (ConnectionData)in.readObject();
-                connectionDataVector.add(data);
-            }
+
+            this.connectionDataVector = (ArrayList<ConnectionData>)in.readObject();
+
         } catch (EOFException e) {
+            throw new FileException(e.getMessage());
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new FileException(e.getMessage());
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new FileException(e.getMessage());
         } finally {
             try {
                 in.close();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new FileException(e.getMessage());
             }
         }
     }
