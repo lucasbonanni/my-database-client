@@ -4,12 +4,11 @@ import connection.ConnectionData;
 import connection.ConnectionManager;
 
 import javax.swing.*;
-import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
-
+import java.text.NumberFormat;
 public class ConnectionManagerWindow extends JDialog implements ItemListener {
     /**
 	 * 
@@ -89,6 +88,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
         databaseNameField = new JTextField();
         passwordField = new JPasswordField();
         driverNameField = new JTextField();
+
     }
 
     public void build(){
@@ -97,8 +97,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
 
         btnNew.addActionListener((e -> {
             this.selectedItem = new ConnectionData();
-            this.connectionsCombo.addItem(this.selectedItem);
-            this.connectionsCombo.setSelectedItem(this.selectedItem);
+            fillForm();
         }));
         btnDelete.addActionListener((e -> {
             this.connectionsCombo.removeItem(this.selectedItem);
@@ -113,6 +112,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
             this.selectedItem.setPassword(pass);
             this.selectedItem.setUserName(this.userField.getText());
             this.selectedItem.setPort(Integer.parseInt(this.portField.getText()));
+            this.connectionsCombo.addItem(this.selectedItem);
             this.connectionsCombo.updateUI();
         }));
         JPanel buttons = new JPanel();
@@ -214,15 +214,8 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
     }
 
 
-    protected MaskFormatter createHostFormatter() {
-        MaskFormatter formatter = null;
-        try {
-            formatter = new MaskFormatter("####");
-        } catch (java.text.ParseException exc) {
-            System.err.println("formatter is bad: " + exc.getMessage());
-            System.exit(-1);
-        }
-        return formatter;
+    protected NumberFormat createHostFormatter() {
+        return NumberFormat.getNumberInstance();
     }
 
 
