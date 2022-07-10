@@ -2,7 +2,8 @@ package UI;
 
 import connection.ConnectionData;
 import exceptions.ConnectionException;
-import connection.ConnectionManager;
+import exceptions.ServiceException;
+import service.ConnectionManager;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
@@ -36,8 +37,12 @@ public class MainToolBar extends JToolBar implements ItemListener {
         connectionStatus = new JLabel("Desconectado");
     }
 
-    public void build(){
-        connectionManager.loadConnectionsData();
+    public void build() {
+        try {
+            connectionManager.loadConnectionsData();
+        } catch (ServiceException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error al intentar leer el archivo", JOptionPane.ERROR_MESSAGE);
+        }
         setComboData();
         connectionManager.addConnectionsChangedListener((e->setComboData()));
         JPanel panel1 = new JPanel();
@@ -58,7 +63,7 @@ public class MainToolBar extends JToolBar implements ItemListener {
                 connectionManager.connect();
                 this.connectionStatus.setText("Conectado");
             }
-            catch (ConnectionException ex){
+            catch (ServiceException ex){
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error al establecer la conexión", JOptionPane.ERROR_MESSAGE);
             }
         }));

@@ -1,7 +1,7 @@
 package UI;
 
 import exceptions.ConnectionException;
-import connection.ConnectionManager;
+import service.ConnectionManager;
 import service.GenericService;
 import exceptions.ServiceException;
 import service.IGenericService;

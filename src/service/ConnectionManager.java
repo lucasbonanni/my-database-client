@@ -1,8 +1,9 @@
-package connection;
+package service;
 
 
+import connection.ConnectionData;
 import exceptions.ConnectionException;
-import exceptions.FileException;
+import exceptions.ServiceException;
 
 import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
@@ -41,7 +42,7 @@ public class ConnectionManager {
     }
 
 
-    public void saveConnections(ArrayList<ConnectionData> connectionDataVector) {
+    public void saveConnections(ArrayList<ConnectionData> connectionDataVector) throws ServiceException {
         ObjectOutputStream out = null;
         FileOutputStream file = null;
         try {
@@ -53,6 +54,7 @@ public class ConnectionManager {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+            throw new ServiceException(e.getMessage());
         } finally {
             try {
                 out.close();
@@ -66,7 +68,7 @@ public class ConnectionManager {
     }
 
 
-    public void loadConnectionsData() throws FileException {
+    public void loadConnectionsData() throws ServiceException {
         ObjectInputStream in = null;
         FileInputStream file = null;
         try {
@@ -77,19 +79,19 @@ public class ConnectionManager {
             this.connectionDataVector = (ArrayList<ConnectionData>)in.readObject();
 
         } catch (EOFException e) {
-            throw new FileException(e.getMessage());
+            throw new ServiceException(e.getMessage());
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            throw new FileException(e.getMessage());
+            throw new ServiceException(e.getMessage());
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
-            throw new FileException(e.getMessage());
+            throw new ServiceException(e.getMessage());
         } finally {
             try {
                 in.close();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
-                throw new FileException(e.getMessage());
+                throw new ServiceException(e.getMessage());
             }
         }
     }
@@ -139,12 +141,12 @@ public class ConnectionManager {
         this.selectedConnection = selectedItem;
     }
 
-    public void connect() throws ConnectionException {
+    public void connect() throws ServiceException {
         try {
             this.selectedConnection.Connect();
             this.fireActionPerformed(connectionEstablished, new ActionEvent(connectionDataVector,ActionEvent.ACTION_PERFORMED,"connectionEstablished"));
         } catch (SQLException e) {
-            throw new ConnectionException(e.getMessage(),e.getErrorCode(),e);
+            throw new ServiceException(e.getMessage(),e.getErrorCode(),e);
         }
     }
 

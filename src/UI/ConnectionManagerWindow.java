@@ -1,7 +1,8 @@
 package UI;
 
 import connection.ConnectionData;
-import connection.ConnectionManager;
+import exceptions.ServiceException;
+import service.ConnectionManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -194,7 +195,11 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
 
         btnCancel.addActionListener((e) -> dispose()); // Dispose de modal
         btnAccept.addActionListener((e) -> {
-            connectionManager.saveConnections(getComboItems());
+            try {
+                connectionManager.saveConnections(getComboItems());
+            } catch (ServiceException ex) {
+                ex.printStackTrace();
+            }
             dispose();
         });
         bottomButtons.add(btnAccept);
