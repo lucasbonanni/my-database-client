@@ -3,6 +3,7 @@ package service;
 
 import connection.ConnectionData;
 import exceptions.ConnectionException;
+import exceptions.DaoException;
 import exceptions.ServiceException;
 
 import javax.swing.event.EventListenerList;
@@ -81,23 +82,24 @@ public class ConnectionManager {
         } catch (EOFException e) {
             throw new ServiceException(e.getMessage());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             throw new ServiceException(e.getMessage());
         } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
             throw new ServiceException(e.getMessage());
         } finally {
             try {
                 in.close();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 throw new ServiceException(e.getMessage());
             }
         }
     }
 
-    public java.sql.Connection getConnection() throws ConnectionException {
-        return selectedConnection.getConnection();
+    public java.sql.Connection getConnection() throws ServiceException {
+        try {
+            return selectedConnection.getConnection();
+        } catch (DaoException e) {
+            throw new ServiceException(e.getMessage(),e.getErrorCode(),e);
+        }
     }
 
     public ArrayList<ConnectionData> getConnections(){
@@ -145,17 +147,17 @@ public class ConnectionManager {
         try {
             this.selectedConnection.Connect();
             this.fireActionPerformed(connectionEstablished, new ActionEvent(connectionDataVector,ActionEvent.ACTION_PERFORMED,"connectionEstablished"));
-        } catch (SQLException e) {
+        } catch (DaoException e) {
             throw new ServiceException(e.getMessage(),e.getErrorCode(),e);
         }
     }
 
-    public void disconnect() throws ConnectionException {
+    public void disconnect() throws ServiceException {
         try {
             this.selectedConnection.disconnect();
             this.fireActionPerformed(connectionDisconnected, new ActionEvent(connectionDataVector,ActionEvent.ACTION_PERFORMED,"connectionDisconnected"));
-        } catch (SQLException e) {
-            throw new ConnectionException(e.getMessage(),e.getErrorCode(),e);
+        } catch (DaoException e) {
+            throw new ServiceException(e.getMessage(),e.getErrorCode(),e);
         }
 
     }

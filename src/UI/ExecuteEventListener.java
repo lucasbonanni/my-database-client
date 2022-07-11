@@ -1,6 +1,7 @@
 package UI;
 
 import exceptions.ConnectionException;
+import exceptions.ServiceException;
 import service.IGenericService;
 
 import javax.swing.*;
@@ -22,7 +23,7 @@ public class ExecuteEventListener implements MouseListener {
         String text = queryPane.getText();
         try {
             service.executeStatement(text);
-        } catch (ConnectionException ex){
+        } catch (ServiceException ex){
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error al ejecutar sentencia", JOptionPane.ERROR_MESSAGE);
         }
 

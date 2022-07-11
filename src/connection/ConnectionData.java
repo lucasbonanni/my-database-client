@@ -1,6 +1,6 @@
 package connection;
 
-import exceptions.ConnectionException;
+import exceptions.DaoException;
 
 import java.io.Serializable;
 import java.sql.Connection;
@@ -41,27 +41,27 @@ public class ConnectionData implements Serializable {
     /**
      * Se debería mover el connection manager
      */
-    public void Connect() throws SQLException {
+    public void Connect() throws DaoException {
         connection = null;
         try {
             connection = DriverManager.getConnection(this.getUrl(), this.userName,this.password);
         } catch (SQLException e) {
-            throw e;
+            throw new DaoException(e.getMessage());
         }
     }
-    public Connection getConnection() throws ConnectionException {
+    public Connection getConnection() throws DaoException {
         if(this.connection == null){
-            throw new ConnectionException("No se estableción una conexión",0,null);
+            throw new DaoException("No se estableción una conexión");
         }
         return this.connection;
     }
 
-    public void disconnect() throws SQLException {
+    public void disconnect() throws DaoException {
         if(this.connection != null){
             try {
                 this.connection.close();
             } catch (SQLException e) {
-                throw e;
+                throw new DaoException(e.getMessage(),e.getErrorCode(),e);
             }
         }
         this.connection = null;

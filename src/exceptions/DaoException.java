@@ -13,6 +13,10 @@ public class DaoException extends Exception {
         this.errorCode = String.valueOf(errorCode);
     }
 
+    public DaoException(String message) {
+        super(message);
+    }
+
     public String getErrorCode() {
         return errorCode;
     }

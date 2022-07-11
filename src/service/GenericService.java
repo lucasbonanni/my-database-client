@@ -1,11 +1,9 @@
 package service;
 
 
-import connection.ConnectionManager;
 import connection.ExecuteStatementEvent;
 import dao.GenericDao;
 import dao.IGenericDao;
-import exceptions.ConnectionException;
 import exceptions.DaoException;
 import exceptions.ServiceException;
 
@@ -33,8 +31,8 @@ public class GenericService implements IGenericService {
     }
 
     @Override
-    public void executeStatement(String query) throws ConnectionException {
-        DefaultTableModel tableModel = null;
+    public void executeStatement(String query) throws ServiceException {
+        DefaultTableModel tableModel;
         try {
             tableModel = this.genericDao.executeStatement(connectionManager.getConnection(), query);
 
@@ -45,17 +43,17 @@ public class GenericService implements IGenericService {
             */
             tableModel = buildErrorTable(e);
         }
-        catch (ConnectionException ex){
+        catch (ServiceException ex){
             throw ex;
         }
         fireActionPerformed(tableModel);
     }
 
     private DefaultTableModel buildErrorTable(DaoException e) {
-        Vector<String> columnNames = new Vector<String>();
+        Vector<String> columnNames = new Vector<>();
         Vector<Vector<Object>> data = new Vector<>();
         columnNames.add("Mensaje");
-        columnNames.add("Codigo de error");
+        columnNames.add("Código de error");
         Vector<Object> row = new Vector<>();
         row.add(e.getMessage());
         row.add(e.getErrorCode());
@@ -67,15 +65,12 @@ public class GenericService implements IGenericService {
 
 
     @Override
-    public ArrayList<String> getDatabaseObjects(String catalog) throws ServiceException, ConnectionException {
-        ArrayList<String> results = new ArrayList<>();
+    public ArrayList<String> getDatabaseObjects(String catalog) throws ServiceException {
+        ArrayList<String> results;
         try {
             results =  this.genericDao.getDatabaseObjects(catalog, this.connectionManager.getConnection());
         } catch (DaoException e) {
             throw new ServiceException(e.getMessage(),e.getErrorCode(),e.getCause());
-        }
-        catch (ConnectionException ex){
-            throw ex;
         }
         return results;
     }
@@ -83,7 +78,7 @@ public class GenericService implements IGenericService {
     protected void fireActionPerformed(DefaultTableModel tableModel) {
         // Guaranteed to return a non-null array
         Object[] listeners = listenerList.getListenerList();
-        ExecuteStatementEvent e = null;
+        ExecuteStatementEvent e;
         // Process the listeners last to first, notifying
         // those that are interested in this event
         for (int i = listeners.length-2; i>=0; i-=2) {

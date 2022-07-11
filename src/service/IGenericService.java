@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public interface IGenericService {
     void addListener(ActionListener actionListener);
 
-    void executeStatement(String query) throws ConnectionException;
+    void executeStatement(String query) throws ServiceException;
 
     ArrayList<String> getDatabaseObjects(String catalog) throws ServiceException, ConnectionException;
 }

@@ -72,7 +72,7 @@ public class MainToolBar extends JToolBar implements ItemListener {
                 connectionManager.disconnect();
                 connectionStatus.setText("Desconectado");
             }
-            catch (ConnectionException ex){
+            catch (ServiceException ex){
                 JOptionPane.showMessageDialog(this, "Ocurrió un problema al desconectar", "Error al desconectar", JOptionPane.ERROR_MESSAGE);
             }
         }));
