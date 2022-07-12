@@ -1,4 +1,4 @@
-package connection;
+package service;
 
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;

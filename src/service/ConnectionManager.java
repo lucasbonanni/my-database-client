@@ -1,16 +1,13 @@
 package service;
 
 
-import connection.ConnectionData;
-import exceptions.ConnectionException;
-import exceptions.DaoException;
-import exceptions.ServiceException;
+import dao.ConnectionData;
+import dao.DaoException;
 
 import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ConnectionManager {
@@ -32,7 +29,11 @@ public class ConnectionManager {
 
 /*        connectionDataVector.add(new ConnectionData("com.mysql.jdbc.Driver", "127.0.0.1", 3306,"world", "root",""));
         connectionDataVector.add(new ConnectionData("org.postgresql.Driver", "127.0.0.1", 3000,"Sakila", "admin","password"));
-        this.saveConnections(connectionDataVector);*/
+        try {
+            this.saveConnections(connectionDataVector);
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }*/
     }
 
     public static ConnectionManager getInstance(){

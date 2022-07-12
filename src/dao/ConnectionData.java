@@ -1,6 +1,6 @@
-package connection;
+package dao;
 
-import exceptions.DaoException;
+
 
 import java.io.Serializable;
 import java.sql.Connection;
@@ -46,7 +46,7 @@ public class ConnectionData implements Serializable {
         try {
             connection = DriverManager.getConnection(this.getUrl(), this.userName,this.password);
         } catch (SQLException e) {
-            throw new DaoException(e.getMessage());
+            throw new DaoException(e.getMessage(),e.getErrorCode(),e);
         }
     }
     public Connection getConnection() throws DaoException {

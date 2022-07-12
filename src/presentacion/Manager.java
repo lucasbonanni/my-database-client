@@ -1,4 +1,4 @@
-package UI;
+package presentacion;
 
 public class Manager {
     private MainFrame mainFrame;

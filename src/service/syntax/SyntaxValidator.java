@@ -1,4 +1,4 @@
-package syntax;
+package service.syntax;
 
 public class SyntaxValidator {
 

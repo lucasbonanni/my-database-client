@@ -1,8 +1,7 @@
-package UI;
+package presentacion;
 
-import connection.ConnectionData;
-import exceptions.ConnectionException;
-import exceptions.ServiceException;
+import dao.ConnectionData;
+import service.ServiceException;
 import service.ConnectionManager;
 
 import javax.swing.*;

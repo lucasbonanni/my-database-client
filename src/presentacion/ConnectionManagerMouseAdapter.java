@@ -1,4 +1,4 @@
-package UI;
+package presentacion;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

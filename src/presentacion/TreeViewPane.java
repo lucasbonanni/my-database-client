@@ -1,9 +1,9 @@
-package UI;
+package presentacion;
 
-import exceptions.ConnectionException;
+
 import service.ConnectionManager;
 import service.GenericService;
-import exceptions.ServiceException;
+import service.ServiceException;
 import service.IGenericService;
 
 import javax.swing.*;
@@ -41,9 +41,6 @@ public class TreeViewPane extends JScrollPane {
             }
             catch (ServiceException ex){
                 JOptionPane.showMessageDialog(this, ex.getMessage() + String.format(" (Error code: %s)", ex.getErrorCode()), "Error al establecer la conexión", JOptionPane.ERROR_MESSAGE);
-            }
-            catch (ConnectionException ex){
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error al establecer la conexión", JOptionPane.ERROR_MESSAGE);
             }
         }));
 

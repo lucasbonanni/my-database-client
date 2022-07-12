@@ -1,6 +1,6 @@
-package UI;
+package presentacion;
 
-import connection.ExecuteStatementEvent;
+import service.ExecuteStatementEvent;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

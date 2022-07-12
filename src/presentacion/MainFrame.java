@@ -1,15 +1,12 @@
-package UI;
+package presentacion;
 
-import connection.ConnectionData;
-import exceptions.ConnectionException;
+import dao.connection.ConnectionData;
 import service.GenericService;
 import service.IGenericService;
 
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class MainFrame extends JFrame {
     private final IGenericService genericService;

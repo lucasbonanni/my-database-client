@@ -1,4 +1,4 @@
-package connection;
+package dao.connection;
 
 import java.util.UUID;
 

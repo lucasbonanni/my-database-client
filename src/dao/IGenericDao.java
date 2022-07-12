@@ -1,7 +1,5 @@
 package dao;
 
-import exceptions.DaoException;
-
 import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package connection;
+package dao.connection;
 
 public interface IDatabase {
 }

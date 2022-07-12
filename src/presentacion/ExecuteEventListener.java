@@ -1,7 +1,6 @@
-package UI;
+package presentacion;
 
-import exceptions.ConnectionException;
-import exceptions.ServiceException;
+import service.ServiceException;
 import service.IGenericService;
 
 import javax.swing.*;

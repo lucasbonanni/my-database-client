@@ -1,11 +1,9 @@
 package service;
 
 
-import connection.ExecuteStatementEvent;
 import dao.GenericDao;
 import dao.IGenericDao;
-import exceptions.DaoException;
-import exceptions.ServiceException;
+import dao.DaoException;
 
 import javax.swing.event.EventListenerList;
 import javax.swing.table.DefaultTableModel;

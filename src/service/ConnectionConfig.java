@@ -1,10 +1,10 @@
 package service;
 
-public class ConnectionStorage {
-
+public class ConnectionConfig {
+/*
     private static final String connectionsFileName = "connections.dat";
 
-/*    public void saveConnections(ArrayList<ConnectionData> connectionDataVector) {
+    public void saveConnections(ArrayList<ConnectionData> connectionDataVector) {
         ObjectOutputStream out = null;
         FileOutputStream file = null;
         try {
@@ -24,12 +24,12 @@ public class ConnectionStorage {
                 e.printStackTrace();
             }
         }
-        this.connectionDataVector = connectionDataVector;
-        this.fireActionPerformed(connectionsChanged,new ActionEvent(connectionDataVector,ActionEvent.ACTION_PERFORMED,"updateConnections"));
+//        this.connectionDataVector = connectionDataVector;
+//        this.fireActionPerformed(connectionsChanged,new ActionEvent(connectionDataVector,ActionEvent.ACTION_PERFORMED,"updateConnections"));
     }
 
 
-    public void loadConnectionsData() throws FileException {
+    public void loadConnectionsData() throws ServiceException {
         ObjectInputStream in = null;
         FileInputStream file = null;
         try {
@@ -37,22 +37,19 @@ public class ConnectionStorage {
             in = new ObjectInputStream(file);
 
 
-            this.connectionDataVector = (ArrayList<ConnectionData>)in.readObject();
+//            this.connectionDataVector = (ArrayList<ConnectionData>)in.readObject();
 
         } catch (EOFException e) {
-            throw new FileException(e.getMessage());
+            throw new ServiceException(e.getMessage());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            throw new FileException(e.getMessage());
+            throw new ServiceException(e.getMessage());
         } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
 //            throw new FileException(e.getMessage());
         } finally {
             try {
                 in.close();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
-                throw new FileException(e.getMessage());
+                throw new ServiceException(e.getMessage());
             }
         }
     }*/
