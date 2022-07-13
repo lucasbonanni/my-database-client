@@ -9,6 +9,7 @@ import service.IGenericService;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -24,6 +25,12 @@ public class TreeViewPane extends JScrollPane {
         genericService = new GenericService();
         rootNode = new DefaultMutableTreeNode("*");
         tree = new JTree(rootNode);
+        tree.addTreeSelectionListener((e -> {
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+            if(node.isLeaf()){
+                // add select query
+            }
+        }));
     }
 
     public void build(){
@@ -75,11 +82,11 @@ public class TreeViewPane extends JScrollPane {
         root.add(tables);
         root.add(views);
 
+
         for (String result: schemas) {
             String[] nameParts = result.split("\\.");
             if("TABLE".equals(nameParts[0].toUpperCase())){
                 tables.add(new DefaultMutableTreeNode(nameParts[1]));
-
             }
             if("VIEW".equals(nameParts[0].toUpperCase())) {
                 views.add(new DefaultMutableTreeNode(nameParts[1]));
