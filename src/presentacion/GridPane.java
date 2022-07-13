@@ -4,17 +4,20 @@ import service.ExecuteStatementEvent;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class GridPane extends JScrollPane implements ActionListener {
 
     JTable table;
+
 
     public GridPane(){
         super();
@@ -40,6 +43,10 @@ public class GridPane extends JScrollPane implements ActionListener {
         // It creates and displays the table
         table = new JTable(model);
         table.getTableHeader().setBackground(Color.lightGray);
+        table.setAutoCreateRowSorter(true);
+        TableRowSorter<DefaultTableModel> sorter
+                = new TableRowSorter<DefaultTableModel>((DefaultTableModel) table.getModel());
+        table.setRowSorter(sorter);
         setViewportView(table);
         updateUI();
     }
