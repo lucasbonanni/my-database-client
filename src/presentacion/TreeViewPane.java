@@ -1,62 +1,31 @@
 package presentacion;
 
 
-import service.ConnectionService;
-import service.GenericService;
-import service.ServiceException;
-import service.IGenericService;
-
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class TreeViewPane extends JScrollPane {
 
-    private final ConnectionService connectionService;
-    private final IGenericService genericService;
+
+    public JTree getTree() {
+        return tree;
+    }
+
+    public DefaultMutableTreeNode getRootNode() {
+        return rootNode;
+    }
+
     private JTree tree;
     private DefaultMutableTreeNode rootNode;
-    public TreeViewPane() {
 
-        connectionService = ConnectionService.getInstance();
-        genericService = new GenericService();
+    public TreeViewPane() {
         rootNode = new DefaultMutableTreeNode("*");
         tree = new JTree(rootNode);
-        tree.addTreeSelectionListener((e -> {
-            DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
-            if(node.isLeaf()){
-                // add select query
-            }
-        }));
+
     }
 
     public void build(){
-
-
-
-        this.connectionService.addConnectionEstablishedListener((e -> {
-            try {
-                String catalog = this.connectionService.getSelectedConnection().getDatabaseName();
-                rootNode.setUserObject(catalog);
-                ArrayList<String> schemas = this.genericService.getDatabaseObjects(catalog);
-                getObjectsTree(rootNode,schemas);
-                DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-                model.reload(rootNode);
-            }
-            catch (ServiceException ex){
-                JOptionPane.showMessageDialog(this, ex.getMessage() + String.format(" (Error code: %s)", ex.getErrorCode()), "Error al establecer la conexión", JOptionPane.ERROR_MESSAGE);
-            }
-        }));
-
-        this.connectionService.addConnectionDisconnectedListener((e -> {
-            rootNode.removeAllChildren();
-            rootNode.setUserObject("*");
-            DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-            model.reload(rootNode);
-        }));
-
         setLayout(new ScrollPaneLayout.UIResource());
         setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED);
         setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -67,7 +36,6 @@ public class TreeViewPane extends JScrollPane {
         if (tree != null) {
             setViewportView(tree);
         }
-        //setUIProperty("opaque",true);
         updateUI();
 
         if (!this.getComponentOrientation().isLeftToRight()) {
@@ -75,21 +43,5 @@ public class TreeViewPane extends JScrollPane {
         }
     }
 
-    private void getObjectsTree(DefaultMutableTreeNode root, ArrayList<String> schemas) {
-        DefaultMutableTreeNode tables =new DefaultMutableTreeNode("Tables");
-        DefaultMutableTreeNode views =new DefaultMutableTreeNode("Views");
-        root.add(tables);
-        root.add(views);
 
-
-        for (String result: schemas) {
-            String[] nameParts = result.split("\\.");
-            if("TABLE".equals(nameParts[0].toUpperCase())){
-                tables.add(new DefaultMutableTreeNode(nameParts[1]));
-            }
-            if("VIEW".equals(nameParts[0].toUpperCase())) {
-                views.add(new DefaultMutableTreeNode(nameParts[1]));
-            }
-        }
-    }
 }

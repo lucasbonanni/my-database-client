@@ -1,11 +1,16 @@
 package presentacion;
 
 import dao.connection.ConnectionData;
+import service.ConnectionService;
 import service.GenericService;
 import service.IGenericService;
+import service.ServiceException;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class MainController {
     // main view
@@ -13,6 +18,7 @@ public class MainController {
 
     //Components
     private final IGenericService genericService;
+    private final ConnectionService connectionService;
 
     QueryEditorPane queryEditorPane;
     TreeViewPane treeViewPane;
@@ -24,6 +30,7 @@ public class MainController {
     public MainController() {
         this.initMainFrame();
         this.gridController = new GridController();
+        connectionService = ConnectionService.getInstance();
         genericService = new GenericService();
     }
 
@@ -39,7 +46,8 @@ public class MainController {
     public void build(){
         this.gridController.build();
         this.queryEditorPane.build();
-        this.treeViewPane.build();
+        buildTreeView();
+
         this.mainMenuBar.build();
         this.toolBar.build();
         this.genericService.addListener(this.gridController);
@@ -70,8 +78,58 @@ public class MainController {
         this.mainFrame.setSize(new Dimension(500, 500));
     }
 
+    public void buildTreeView(){
+        this.connectionService.addConnectionEstablishedListener((e -> {
+            try {
+                String catalog = this.connectionService.getSelectedConnection().getDatabaseName();
+                this.treeViewPane.getRootNode().setUserObject(catalog);
+                ArrayList<String> schemas = this.genericService.getDatabaseObjects(catalog);
+                getObjectsTree(this.treeViewPane.getRootNode(),schemas);
+                DefaultTreeModel model = (DefaultTreeModel) this.treeViewPane.getTree().getModel();
+                model.reload(this.treeViewPane.getRootNode());
+            }
+            catch (ServiceException ex){
+                JOptionPane.showMessageDialog(this.treeViewPane, ex.getMessage() + String.format(" (Error code: %s)", ex.getErrorCode()), "Error al establecer la conexión", JOptionPane.ERROR_MESSAGE);
+            }
+        }));
+
+        this.connectionService.addConnectionDisconnectedListener((e -> {
+            this.treeViewPane.getRootNode().removeAllChildren();
+            this.treeViewPane.getRootNode().setUserObject("*");
+            DefaultTreeModel model = (DefaultTreeModel) this.treeViewPane.getTree().getModel();
+            model.reload(this.treeViewPane.getRootNode());
+        }));
+        this.treeViewPane.getTree().addTreeSelectionListener((e -> {
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode)this.treeViewPane.getTree().getLastSelectedPathComponent();
+            if(node.isLeaf()){
+                this.queryEditorPane.setText("select * from " + node);
+            }
+        }));
+        this.treeViewPane.build();
+    }
+
     public void showMainFrame()
     {
         this.mainFrame.showFrame();
+    }
+
+
+
+    private void getObjectsTree(DefaultMutableTreeNode root, ArrayList<String> schemas) {
+        DefaultMutableTreeNode tables =new DefaultMutableTreeNode("Tables");
+        DefaultMutableTreeNode views =new DefaultMutableTreeNode("Views");
+        root.add(tables);
+        root.add(views);
+
+
+        for (String result: schemas) {
+            String[] nameParts = result.split("\\.");
+            if("TABLE".equals(nameParts[0].toUpperCase())){
+                tables.add(new DefaultMutableTreeNode(nameParts[1]));
+            }
+            if("VIEW".equals(nameParts[0].toUpperCase())) {
+                views.add(new DefaultMutableTreeNode(nameParts[1]));
+            }
+        }
     }
 }
