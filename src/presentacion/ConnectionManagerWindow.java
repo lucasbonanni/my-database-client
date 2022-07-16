@@ -2,7 +2,7 @@ package presentacion;
 
 import dao.ConnectionData;
 import service.ServiceException;
-import service.ConnectionManager;
+import service.ConnectionService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +18,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
 
 	private final int pad = 5;
 
-    ConnectionManager connectionManager;
+    ConnectionService connectionService;
     JComboBox<ConnectionData> connectionsCombo;
 
     JToolBar toolBar;
@@ -55,7 +55,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
         initializeFields();
         initializeLabels();
         initializeButtons();
-        connectionManager = ConnectionManager.getInstance();
+        connectionService = ConnectionService.getInstance();
 
         connectionsCombo = new JComboBox<>();
         driverClassCombo = new JComboBox<>();
@@ -94,7 +94,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
 
     public void build(){
         JPanel connectionsPanel = InitializeData();
-        connectionManager.addConnectionsChangedListener((e) -> setConnectionsComboData());
+        connectionService.addConnectionsChangedListener((e) -> setConnectionsComboData());
 
         btnNew.addActionListener((e -> {
             this.selectedItem = new ConnectionData();
@@ -196,7 +196,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
         btnCancel.addActionListener((e) -> dispose()); // Dispose de modal
         btnAccept.addActionListener((e) -> {
             try {
-                connectionManager.saveConnections(getComboItems());
+                connectionService.saveConnections(getComboItems());
             } catch (ServiceException ex) {
                 ex.printStackTrace();
             }
@@ -242,7 +242,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
     }
 
     private void setConnectionsComboData(){
-        DefaultComboBoxModel connections = new DefaultComboBoxModel<>(((ArrayList<ConnectionData>)connectionManager.getConnections().clone()).toArray()) ;
+        DefaultComboBoxModel connections = new DefaultComboBoxModel<>(((ArrayList<ConnectionData>) connectionService.getConnections().clone()).toArray()) ;
         connectionsCombo.setModel(connections);
     }
 

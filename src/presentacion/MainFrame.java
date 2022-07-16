@@ -5,7 +5,6 @@ import service.GenericService;
 import service.IGenericService;
 
 import javax.swing.*;
-import javax.swing.event.EventListenerList;
 import java.awt.*;
 
 public class MainFrame extends JFrame {
@@ -16,7 +15,6 @@ public class MainFrame extends JFrame {
     MainMenuBar mainMenuBar;
     ConnectionData connectionData;
     MainToolBar toolBar;
-    protected EventListenerList listenerList = new EventListenerList();
 
     public MainFrame(){
         super();

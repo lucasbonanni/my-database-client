@@ -1,7 +1,7 @@
 package presentacion;
 
 
-import service.ConnectionManager;
+import service.ConnectionService;
 import service.GenericService;
 import service.ServiceException;
 import service.IGenericService;
@@ -9,19 +9,18 @@ import service.IGenericService;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 import java.util.ArrayList;
 
 public class TreeViewPane extends JScrollPane {
 
-    private final ConnectionManager connectionManager;
+    private final ConnectionService connectionService;
     private final IGenericService genericService;
     private JTree tree;
     private DefaultMutableTreeNode rootNode;
     public TreeViewPane() {
 
-        connectionManager = ConnectionManager.getInstance();
+        connectionService = ConnectionService.getInstance();
         genericService = new GenericService();
         rootNode = new DefaultMutableTreeNode("*");
         tree = new JTree(rootNode);
@@ -37,9 +36,9 @@ public class TreeViewPane extends JScrollPane {
 
 
 
-        this.connectionManager.addConnectionEstablishedListener((e -> {
+        this.connectionService.addConnectionEstablishedListener((e -> {
             try {
-                String catalog = this.connectionManager.getSelectedConnection().getDatabaseName();
+                String catalog = this.connectionService.getSelectedConnection().getDatabaseName();
                 rootNode.setUserObject(catalog);
                 ArrayList<String> schemas = this.genericService.getDatabaseObjects(catalog);
                 getObjectsTree(rootNode,schemas);
@@ -51,7 +50,7 @@ public class TreeViewPane extends JScrollPane {
             }
         }));
 
-        this.connectionManager.addConnectionDisconnectedListener((e -> {
+        this.connectionService.addConnectionDisconnectedListener((e -> {
             rootNode.removeAllChildren();
             rootNode.setUserObject("*");
             DefaultTreeModel model = (DefaultTreeModel) tree.getModel();

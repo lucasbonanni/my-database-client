@@ -14,12 +14,12 @@ import java.util.Vector;
 
 public class GenericService implements IGenericService {
 
-    private final ConnectionManager connectionManager;
+    private final ConnectionService connectionService;
     private IGenericDao genericDao;
     private EventListenerList listenerList = new EventListenerList();
 
     public GenericService() {
-         connectionManager = ConnectionManager.getInstance();
+         connectionService = ConnectionService.getInstance();
          genericDao = new GenericDao();
     }
 
@@ -32,7 +32,7 @@ public class GenericService implements IGenericService {
     public void executeStatement(String query) throws ServiceException {
         DefaultTableModel tableModel;
         try {
-            tableModel = this.genericDao.executeStatement(connectionManager.getConnection(), query);
+            tableModel = this.genericDao.executeStatement(connectionService.getConnection(), query);
 
         } catch (DaoException e) {
             /*
@@ -66,7 +66,7 @@ public class GenericService implements IGenericService {
     public ArrayList<String> getDatabaseObjects(String catalog) throws ServiceException {
         ArrayList<String> results;
         try {
-            results =  this.genericDao.getDatabaseObjects(catalog, this.connectionManager.getConnection());
+            results =  this.genericDao.getDatabaseObjects(catalog, this.connectionService.getConnection());
         } catch (DaoException e) {
             throw new ServiceException(e.getMessage(),e.getErrorCode(),e.getCause());
         }

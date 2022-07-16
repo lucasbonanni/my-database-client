@@ -2,7 +2,7 @@ package presentacion;
 
 import dao.ConnectionData;
 import service.ServiceException;
-import service.ConnectionManager;
+import service.ConnectionService;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class MainToolBar extends JToolBar implements ItemListener {
 
-    private final ConnectionManager connectionManager;
+    private final ConnectionService connectionService;
     JButton btnExecute;
     JButton btnClearText;
     JButton btnConnect;
@@ -32,18 +32,18 @@ public class MainToolBar extends JToolBar implements ItemListener {
         btnDisconnect = new JButton("Desconectar");
         btnConnect = new JButton("Conectar");
         connectionsCombo = new JComboBox<>();
-        connectionManager = ConnectionManager.getInstance();
+        connectionService = ConnectionService.getInstance();
         connectionStatus = new JLabel("Desconectado");
     }
 
     public void build() {
         try {
-            connectionManager.loadConnectionsData();
+            connectionService.loadConnectionsData();
         } catch (ServiceException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error al intentar leer el archivo", JOptionPane.ERROR_MESSAGE);
         }
         setComboData();
-        connectionManager.addConnectionsChangedListener((e->setComboData()));
+        connectionService.addConnectionsChangedListener((e->setComboData()));
         JPanel panel1 = new JPanel();
         panel1.add(connectionsCombo);
         panel1.add(btnConnect);
@@ -59,7 +59,7 @@ public class MainToolBar extends JToolBar implements ItemListener {
         connectionsCombo.addItemListener(this);
         btnConnect.addActionListener((e -> {
             try {
-                connectionManager.connect();
+                connectionService.connect();
                 this.connectionStatus.setText("Conectado");
             }
             catch (ServiceException ex){
@@ -68,18 +68,18 @@ public class MainToolBar extends JToolBar implements ItemListener {
         }));
         btnDisconnect.addActionListener((e -> {
             try {
-                connectionManager.disconnect();
+                connectionService.disconnect();
                 connectionStatus.setText("Desconectado");
             }
             catch (ServiceException ex){
                 JOptionPane.showMessageDialog(this, "Ocurrió un problema al desconectar", "Error al desconectar", JOptionPane.ERROR_MESSAGE);
             }
         }));
-        connectionManager.setSelectedConnection((ConnectionData) this.connectionsCombo.getSelectedItem());
+        connectionService.setSelectedConnection((ConnectionData) this.connectionsCombo.getSelectedItem());
     }
 
     private void setComboData(){
-        DefaultComboBoxModel connections = new DefaultComboBoxModel<>(((ArrayList<ConnectionData>)connectionManager.getConnections().clone()).toArray()) ;
+        DefaultComboBoxModel connections = new DefaultComboBoxModel<>(((ArrayList<ConnectionData>) connectionService.getConnections().clone()).toArray()) ;
         connectionsCombo.setModel(connections);
     }
 
@@ -89,7 +89,7 @@ public class MainToolBar extends JToolBar implements ItemListener {
 
     @Override
     public void itemStateChanged(ItemEvent e) {
-       this.connectionManager.setSelectedConnection((ConnectionData)this.connectionsCombo.getSelectedItem());
+       this.connectionService.setSelectedConnection((ConnectionData)this.connectionsCombo.getSelectedItem());
 
     }
 }

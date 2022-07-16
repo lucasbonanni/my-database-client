@@ -10,10 +10,10 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.ArrayList;
 
-public class ConnectionManager {
+public class ConnectionService {
     private static final String connectionsFileName = "connections.dat";
 
-    private static ConnectionManager instance = null;
+    private static ConnectionService instance = null;
 
     private ConnectionData selectedConnection;
 
@@ -24,7 +24,7 @@ public class ConnectionManager {
     private EventListenerList connectionEstablished = new EventListenerList();
     private EventListenerList connectionDisconnected = new EventListenerList();
 
-    private ConnectionManager() {
+    private ConnectionService() {
         connectionDataVector = new ArrayList<>();
 
 /*        connectionDataVector.add(new ConnectionData("com.mysql.jdbc.Driver", "127.0.0.1", 3306,"world", "root",""));
@@ -36,9 +36,9 @@ public class ConnectionManager {
         }*/
     }
 
-    public static ConnectionManager getInstance(){
+    public static ConnectionService getInstance(){
         if(instance == null){
-            instance = new ConnectionManager();
+            instance = new ConnectionService();
         }
         return instance;
     }

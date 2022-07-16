@@ -50,9 +50,7 @@ public class ConnectionData implements Serializable {
         }
     }
     public Connection getConnection() throws DaoException {
-        if(this.connection == null){
-            throw new DaoException("No se estableción una conexión");
-        }
+        if(this.connection == null) throw new DaoException("No se estableción una conexión");
         return this.connection;
     }
 
