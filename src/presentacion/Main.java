@@ -2,8 +2,8 @@ package presentacion;
 
 public class Main {
     public static void main(String[] args) {
-        Manager manager = new Manager();
-        manager.build();
-        manager.showMainFrame();
+        MainController mainController = new MainController();
+        mainController.build();
+        mainController.showMainFrame();
     }
 }
