@@ -13,32 +13,40 @@ public class MainController {
 
     //Components
     private final IGenericService genericService;
-    GridPane gridPane;
+
     QueryEditorPane queryEditorPane;
     TreeViewPane treeViewPane;
     MainMenuBar mainMenuBar;
     ConnectionData connectionData;
     MainToolBar toolBar;
+    GridController gridController;
 
     public MainController() {
+        this.initMainFrame();
+        this.gridController = new GridController();
+        genericService = new GenericService();
+    }
+
+    public void initMainFrame(){
         this.mainFrame = new MainFrame();
-        gridPane = new GridPane();
         queryEditorPane = new QueryEditorPane();
         this.treeViewPane = new TreeViewPane();
         this.mainMenuBar = new MainMenuBar();
         connectionData = new ConnectionData();
         toolBar = new MainToolBar();
-        genericService = new GenericService();
     }
 
     public void build(){
-        this.gridPane.build();
+        this.gridController.build();
         this.queryEditorPane.build();
         this.treeViewPane.build();
         this.mainMenuBar.build();
         this.toolBar.build();
-        this.genericService.addListener(gridPane);
+        this.genericService.addListener(this.gridController);
+        buildMainFrame();
+    }
 
+    private void buildMainFrame() {
         JButton btnExecute = this.toolBar.getBtnExecute();
         btnExecute.addMouseListener(new ExecuteEventListener(this.queryEditorPane,this.genericService));
 
@@ -52,7 +60,7 @@ public class MainController {
         this.mainFrame.setJMenuBar(mainMenuBar);
         JTabbedPane tabbed = new JTabbedPane();
         tabbed.setForeground(Color.black);
-        tabbed.add("result 1",gridPane);
+        tabbed.add("result 1",this.gridController.getGridPane());
         this.mainFrame.getContentPane().add(toolBar, BorderLayout.PAGE_START);
         this.mainFrame.getContentPane().add(treeViewPane, BorderLayout.WEST);
         this.mainFrame.getContentPane().add(queryEditorPane, BorderLayout.CENTER);
