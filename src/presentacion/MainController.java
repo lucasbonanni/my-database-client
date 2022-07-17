@@ -47,7 +47,6 @@ public class MainController {
         this.gridController.build();
         this.queryEditorPane.build();
         buildTreeView();
-
         this.mainMenuBar.build();
         this.buildMainToolbar();
         this.genericService.addListener(this.gridController);
@@ -62,8 +61,14 @@ public class MainController {
             this.queryEditorPane.clearText();
         }));
         JMenuItem connectionManager = this.mainMenuBar.getConnectionManager();
-        ConnectionManagerMouseAdapter managerMouseAdapter = new ConnectionManagerMouseAdapter(this.mainFrame);
-        connectionManager.addActionListener(managerMouseAdapter);
+        connectionManager.addActionListener(e -> {
+                String text = this.queryEditorPane.getText();
+                try {
+                   genericService.executeStatement(text);
+                } catch (ServiceException ex){
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Error al ejecutar sentencia", JOptionPane.ERROR_MESSAGE);
+                }
+        });
 
         this.mainFrame.setJMenuBar(mainMenuBar);
         JTabbedPane tabbed = new JTabbedPane();
