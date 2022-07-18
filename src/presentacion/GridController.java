@@ -1,7 +1,6 @@
 package presentacion;
 
 import service.ExecuteStatementEvent;
-import service.ServiceException;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -9,7 +8,6 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 
 public class GridController implements ActionListener {
     public GridPane getGridPane() {
