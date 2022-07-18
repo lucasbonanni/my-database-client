@@ -1,6 +1,7 @@
 package presentacion;
 
 import service.ExecuteStatementEvent;
+import service.ServiceException;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -37,14 +38,11 @@ public class GridController implements ActionListener {
 
         ExecuteStatementEvent event = (ExecuteStatementEvent) e;
 
-        try {
-            this.showResults(event.getResultSet());
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        this.showResults(event.getResultSet());
+
     }
 
-    public void showResults(DefaultTableModel model) throws SQLException {
+    public void showResults(DefaultTableModel model) {
         // It creates and displays the table
         table = new JTable(model);
         table.getTableHeader().setBackground(Color.lightGray);

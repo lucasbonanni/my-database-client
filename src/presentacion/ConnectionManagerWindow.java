@@ -1,14 +1,11 @@
 package presentacion;
 
 import dao.ConnectionData;
-import service.ServiceException;
-import service.ConnectionService;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
 import java.text.NumberFormat;
 public class ConnectionManagerWindow extends JDialog implements ItemListener {
     /**
@@ -17,8 +14,30 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
 	private static final long serialVersionUID = 6841453153183086209L;
 
 	private final int pad = 5;
+    public JComboBox<ConnectionData> getConnectionsCombo() {
+        return connectionsCombo;
+    }
 
-    ConnectionService connectionService;
+    public JButton getBtnNew() {
+        return btnNew;
+    }
+
+    public JButton getBtnSave() {
+        return btnSave;
+    }
+
+    public JButton getBtnDelete() {
+        return btnDelete;
+    }
+
+    public JButton getBtnAccept() {
+        return btnAccept;
+    }
+
+    public JButton getBtnCancel() {
+        return btnCancel;
+    }
+
     JComboBox<ConnectionData> connectionsCombo;
 
     JToolBar toolBar;
@@ -55,7 +74,6 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
         initializeFields();
         initializeLabels();
         initializeButtons();
-        connectionService = ConnectionService.getInstance();
 
         connectionsCombo = new JComboBox<>();
         driverClassCombo = new JComboBox<>();
@@ -94,7 +112,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
 
     public void build(){
         JPanel connectionsPanel = InitializeData();
-        connectionService.addConnectionsChangedListener((e) -> setConnectionsComboData());
+
 
         btnNew.addActionListener((e -> {
             this.selectedItem = new ConnectionData();
@@ -194,21 +212,13 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
         JPanel bottomButtons = new JPanel();
 
         btnCancel.addActionListener((e) -> dispose()); // Dispose de modal
-        btnAccept.addActionListener((e) -> {
-            try {
-                connectionService.saveConnections(getComboItems());
-            } catch (ServiceException ex) {
-                ex.printStackTrace();
-            }
-            dispose();
-        });
+
         bottomButtons.add(btnAccept);
         bottomButtons.add(btnCancel);
         this.add(bottomButtons,BorderLayout.PAGE_END);
     }
 
     private JPanel InitializeData() {
-        setConnectionsComboData();
         connectionsCombo.addItemListener(this);
         this.selectedItem = (ConnectionData) connectionsCombo.getSelectedItem();
         this.fillForm();
@@ -241,10 +251,7 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
         this.driverClassCombo.setSelectedItem(this.selectedItem.getDriverName());
     }
 
-    private void setConnectionsComboData(){
-        DefaultComboBoxModel connections = new DefaultComboBoxModel<>(((ArrayList<ConnectionData>) connectionService.getConnections().clone()).toArray()) ;
-        connectionsCombo.setModel(connections);
-    }
+
 
     private void setDriverClassComboData(){
         this.driverClassCombo.addItem("com.mysql.jdbc.Driver");
@@ -252,11 +259,5 @@ public class ConnectionManagerWindow extends JDialog implements ItemListener {
         this.driverClassCombo.addItem("Personalizado (Proximamente)");
     }
 
-    private ArrayList<ConnectionData> getComboItems(){
-        ArrayList<ConnectionData> connections = new ArrayList<>();
-        for(int i = 0; i < connectionsCombo.getItemCount() ; i++ ) {
-            connections.add(connectionsCombo.getItemAt(i));
-        }
-        return connections;
-    }
+
 }

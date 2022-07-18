@@ -62,12 +62,10 @@ public class MainController {
         }));
         JMenuItem connectionManager = this.mainMenuBar.getConnectionManager();
         connectionManager.addActionListener(e -> {
-                String text = this.queryEditorPane.getText();
-                try {
-                   genericService.executeStatement(text);
-                } catch (ServiceException ex){
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Error al ejecutar sentencia", JOptionPane.ERROR_MESSAGE);
-                }
+            ConnectionController connectionController = new ConnectionController();
+            connectionController.InitializeConnectionManagerWindow(this.mainFrame);
+            connectionController.Build();
+            connectionController.Show();
         });
 
         this.mainFrame.setJMenuBar(mainMenuBar);
