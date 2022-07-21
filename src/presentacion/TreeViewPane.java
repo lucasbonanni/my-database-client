@@ -3,7 +3,10 @@ package presentacion;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import java.awt.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class TreeViewPane extends JScrollPane {
 
@@ -26,6 +29,12 @@ public class TreeViewPane extends JScrollPane {
     }
 
     public void build(){
+
+        ImageIcon leafIcon = new ImageIcon("images/dbtable.png");
+        DefaultTreeCellRenderer renderer =
+                new DefaultTreeCellRenderer();
+        renderer.setLeafIcon(leafIcon);
+        tree.setCellRenderer(renderer);
         setLayout(new ScrollPaneLayout.UIResource());
         setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED);
         setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
