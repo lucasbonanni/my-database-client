@@ -156,6 +156,7 @@ public class MainController {
             try {
                 connectionService.connect();
                 this.toolBar.getConnectionStatus().setText("Conectado");
+                this.toolBar.getConnectionStatus().setForeground(new Color(0,133,133));
             }
             catch (ServiceException ex){
                 JOptionPane.showMessageDialog(this.toolBar, ex.getMessage(), "Error al establecer la conexión", JOptionPane.ERROR_MESSAGE);
@@ -165,13 +166,19 @@ public class MainController {
             try {
                 connectionService.disconnect();
                 this.toolBar.getConnectionStatus().setText("Desconectado");
+                this.toolBar.getConnectionStatus().setForeground(Color.darkGray);
             }
             catch (ServiceException ex){
                 JOptionPane.showMessageDialog(this.toolBar, "Ocurrió un problema al desconectar", "Error al desconectar", JOptionPane.ERROR_MESSAGE);
             }
         }));
         connectionService.setSelectedConnection((dao.ConnectionData) this.toolBar.getConnectionsCombo().getSelectedItem());
-
+        this.toolBar.getConnectionStatus().setForeground(Color.darkGray);
+        this.toolBar.getConnectionStatus().setFont(new Font("Serif",Font.ITALIC,10));
+        this.toolBar.getBtnDisconnect().setForeground(new Color(199,82,42));
+        this.toolBar.getBtnDisconnect().setFont(new Font("Serif",Font.PLAIN,14));
+        this.toolBar.getBtnConnect().setForeground(new Color(0,133,133));
+        this.toolBar.getBtnConnect().setFont(new Font("Serif",Font.PLAIN,14));
     }
 
     public void showMainFrame()

@@ -43,7 +43,7 @@ public class GridController implements ActionListener {
     public void showResults(DefaultTableModel model) {
         // It creates and displays the table
         table = new JTable(model);
-        table.getTableHeader().setBackground(Color.lightGray);
+        table.getTableHeader().setBackground(new Color(229,193,133));
         table.setAutoCreateRowSorter(true);
         TableRowSorter<DefaultTableModel> sorter
                 = new TableRowSorter<DefaultTableModel>((DefaultTableModel) table.getModel());

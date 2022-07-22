@@ -27,6 +27,9 @@ public class QueryEditorPane extends JScrollPane {
         if (textArea != null) {
             setViewportView(textArea);
         }
+        textArea.setBackground(new Color(251,247,206));
+        textArea.setForeground(new Color(0,133,133));
+
         //setUIProperty("opaque",true);
         updateUI();
 

@@ -29,7 +29,9 @@ public class TreeViewPane extends JScrollPane {
     }
 
     public void build(){
-
+        tree.setForeground(Color.blue);
+        this.setForeground(Color.blue);
+        this.setOpaque(false);
         ImageIcon leafIcon = new ImageIcon("images/dbtable.png");
         DefaultTreeCellRenderer renderer =
                 new DefaultTreeCellRenderer();
