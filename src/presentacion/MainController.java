@@ -10,6 +10,8 @@ import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class MainController {
@@ -55,7 +57,20 @@ public class MainController {
 
     private void buildMainFrame() {
         JButton btnExecute = this.toolBar.getBtnExecute();
-        btnExecute.addMouseListener(new ExecuteEventListener(this.queryEditorPane,this.genericService));
+        //btnExecute.addMouseListener(new ExecuteEventListener(this.queryEditorPane,this.genericService));
+        btnExecute.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String text = queryEditorPane.getText();
+                try {
+                    genericService.executeStatement(text);
+                } catch (ServiceException ex){
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Error al ejecutar sentencia", JOptionPane.ERROR_MESSAGE);
+                }
+                treeViewPane.getRootNode().removeAllChildren();
+                buildTreeViewTables();
+            }
+        });
 
         toolBar.getBtnClearText().addActionListener((e -> {
             this.queryEditorPane.clearText();
@@ -83,17 +98,7 @@ public class MainController {
 
     public void buildTreeView(){
         this.connectionService.addConnectionEstablishedListener((e -> {
-            try {
-                String catalog = this.connectionService.getSelectedConnection().getDatabaseName();
-                this.treeViewPane.getRootNode().setUserObject(catalog);
-                ArrayList<String> schemas = this.genericService.getDatabaseObjects(catalog);
-                getObjectsTree(this.treeViewPane.getRootNode(),schemas);
-                DefaultTreeModel model = (DefaultTreeModel) this.treeViewPane.getTree().getModel();
-                model.reload(this.treeViewPane.getRootNode());
-            }
-            catch (ServiceException ex){
-                JOptionPane.showMessageDialog(this.treeViewPane, ex.getMessage() + String.format(" (Error code: %s)", ex.getErrorCode()), "Error al establecer la conexión", JOptionPane.ERROR_MESSAGE);
-            }
+            buildTreeViewTables();
         }));
 
         this.connectionService.addConnectionDisconnectedListener((e -> {
@@ -109,6 +114,20 @@ public class MainController {
             }
         }));
         this.treeViewPane.build();
+    }
+
+    private void buildTreeViewTables() {
+        try {
+            String catalog = this.connectionService.getSelectedConnection().getDatabaseName();
+            this.treeViewPane.getRootNode().setUserObject(catalog);
+            ArrayList<String> schemas = this.genericService.getDatabaseObjects(catalog);
+            getObjectsTree(this.treeViewPane.getRootNode(),schemas);
+            DefaultTreeModel model = (DefaultTreeModel) this.treeViewPane.getTree().getModel();
+            model.reload(this.treeViewPane.getRootNode());
+        }
+        catch (ServiceException ex){
+            JOptionPane.showMessageDialog(this.treeViewPane, ex.getMessage() + String.format(" (Error code: %s)", ex.getErrorCode()), "Error al establecer la conexión", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public void buildMainToolbar(){
@@ -164,12 +183,13 @@ public class MainController {
     private void getObjectsTree(DefaultMutableTreeNode root, ArrayList<String> schemas) {
         DefaultMutableTreeNode tables =new DefaultMutableTreeNode("Tables");
         DefaultMutableTreeNode views =new DefaultMutableTreeNode("Views");
+
         root.add(tables);
         root.add(views);
 
-
         for (String result: schemas) {
             String[] nameParts = result.split("\\.");
+
             if("TABLE".equals(nameParts[0].toUpperCase())){
                 tables.add(new DefaultMutableTreeNode(nameParts[1]));
             }
