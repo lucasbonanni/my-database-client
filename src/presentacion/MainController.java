@@ -190,20 +190,22 @@ public class MainController {
     private void getObjectsTree(DefaultMutableTreeNode root, ArrayList<String> schemas) {
         DefaultMutableTreeNode tables =new DefaultMutableTreeNode("Tables");
         DefaultMutableTreeNode views =new DefaultMutableTreeNode("Views");
+        if(!root.children().hasMoreElements()){
+            root.add(tables);
+            root.add(views);
 
-        root.add(tables);
-        root.add(views);
+            for (String result: schemas) {
+                String[] nameParts = result.split("\\.");
 
-        for (String result: schemas) {
-            String[] nameParts = result.split("\\.");
-
-            if("TABLE".equals(nameParts[0].toUpperCase())){
-                tables.add(new DefaultMutableTreeNode(nameParts[1]));
-            }
-            if("VIEW".equals(nameParts[0].toUpperCase())) {
-                views.add(new DefaultMutableTreeNode(nameParts[1]));
+                if("TABLE".equals(nameParts[0].toUpperCase())){
+                    tables.add(new DefaultMutableTreeNode(nameParts[1]));
+                }
+                if("VIEW".equals(nameParts[0].toUpperCase())) {
+                    views.add(new DefaultMutableTreeNode(nameParts[1]));
+                }
             }
         }
+
     }
 
     private void setComboData(){
